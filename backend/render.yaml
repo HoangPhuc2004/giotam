@@ -3,7 +3,7 @@ services:
     name: giotam-backend
     env: python
     plan: free
-    buildCommand: pip install -r requirements-render.txt && python startup.py
+    buildCommand: pip install -r requirements-render.txt && python startup.py && python migrate_donations.py
     startCommand: gunicorn app:app
     envVars:
       - key: BASE_URL
