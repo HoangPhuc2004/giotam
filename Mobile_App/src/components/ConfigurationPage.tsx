@@ -14,6 +14,17 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
   const [isDeleting, setIsDeleting] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordForm, setPasswordForm] = useState({ old: '', new: '', confirm: '' });
+  const [deleteStep, setDeleteStep] = useState<1 | 2>(1);
+  const [deleteReason, setDeleteReason] = useState('');
+
+  const DELETE_REASONS = [
+    "Thường xuyên nhận thông báo không cần thiết",
+    "Không muốn hiến máu nữa",
+    "Cảm thấy bị làm phiền",
+    "Ứng dụng bị lỗi hoặc khó sử dụng",
+    "Tôi muốn tạo tài khoản mới",
+    "Lý do khác"
+  ];
 
   useEffect(() => {
     // Clean up any previously set dark mode state
@@ -226,31 +237,74 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
       {/* Delete Account Alert Dialog */}
       {showDeleteAlert && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl animate-in fade-in zoom-in duration-200 border-2 border-red-100">
-            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-               <Trash2 className="w-6 h-6 text-red-600" />
+          {deleteStep === 1 ? (
+            <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl animate-in fade-in zoom-in duration-200">
+              <h3 className="text-lg font-black text-foreground mb-2">Vì sao bạn muốn rời đi?</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Vui lòng cho chúng tôi biết lý do bạn muốn xóa tài khoản:
+              </p>
+              <div className="space-y-2 mb-6 max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300">
+                {DELETE_REASONS.map((reason, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setDeleteReason(reason)}
+                    className={`w-full text-left p-3 rounded-xl border text-sm transition-colors ${
+                      deleteReason === reason 
+                        ? 'border-destructive bg-red-50 text-destructive font-bold' 
+                        : 'border-gray-200 hover:border-gray-300 text-gray-700'
+                    }`}
+                  >
+                    {reason}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => {
+                    setShowDeleteAlert(false);
+                    setDeleteReason('');
+                    setDeleteStep(1);
+                  }}
+                  className="flex-1 py-3 px-4 bg-gray-100 text-foreground rounded-xl font-bold hover:bg-gray-200"
+                >
+                  Hủy
+                </button>
+                <button 
+                  onClick={() => setDeleteStep(2)}
+                  disabled={!deleteReason}
+                  className="flex-1 py-3 px-4 bg-destructive text-white rounded-xl font-bold hover:bg-destructive/90 shadow-md shadow-destructive/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  Tiếp tục
+                </button>
+              </div>
             </div>
-            <h3 className="text-xl font-black text-center text-foreground mb-2">Xóa Tài Khoản Vĩnh Viễn</h3>
-            <p className="text-gray-600 text-sm mb-6 text-center leading-relaxed">
-              Toàn bộ dữ liệu, lịch sử hiến máu và điểm tích lũy của bạn sẽ bị xóa hoàn toàn. Bạn chắc chắn muốn tiếp tục?
-            </p>
-            <div className="flex flex-col gap-3">
-              <button 
-                onClick={handleDeleteAccount}
-                disabled={isDeleting}
-                className="w-full py-3.5 px-4 bg-destructive text-white rounded-xl font-bold hover:bg-destructive/90 shadow-md shadow-destructive/20 flex justify-center items-center"
-              >
-                {isDeleting ? 'Đang xóa...' : 'Xác nhận Xóa'}
-              </button>
-              <button 
-                onClick={() => setShowDeleteAlert(false)}
-                disabled={isDeleting}
-                className="w-full py-3 px-4 bg-gray-50 text-gray-700 rounded-xl font-bold hover:bg-gray-100"
-              >
-                Hủy, tôi giữ lại
-              </button>
+          ) : (
+            <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl animate-in fade-in zoom-in duration-200 border-2 border-red-100">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                 <Trash2 className="w-6 h-6 text-red-600" />
+              </div>
+              <h3 className="text-xl font-black text-center text-foreground mb-2">Xóa Tài Khoản Vĩnh Viễn</h3>
+              <p className="text-gray-600 text-sm mb-6 text-center leading-relaxed">
+                Toàn bộ dữ liệu, lịch sử hiến máu và điểm tích lũy của bạn sẽ bị xóa hoàn toàn. Bạn chắc chắn muốn tiếp tục?
+              </p>
+              <div className="flex flex-col gap-3">
+                <button 
+                  onClick={handleDeleteAccount}
+                  disabled={isDeleting}
+                  className="w-full py-3.5 px-4 bg-destructive text-white rounded-xl font-bold hover:bg-destructive/90 shadow-md shadow-destructive/20 flex justify-center items-center"
+                >
+                  {isDeleting ? 'Đang xóa...' : 'Xác nhận Xóa'}
+                </button>
+                <button 
+                  onClick={() => setDeleteStep(1)}
+                  disabled={isDeleting}
+                  className="w-full py-3 px-4 bg-gray-50 text-gray-700 rounded-xl font-bold hover:bg-gray-100"
+                >
+                  Quay lại
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>
