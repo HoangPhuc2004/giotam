@@ -77,12 +77,6 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
       page: 'achievements',
     },
     {
-      icon: Settings,
-      label: 'Cài đặt',
-      description: 'Tùy chỉnh ứng dụng',
-      page: 'settings',
-    },
-    {
       icon: HelpCircle,
       label: 'Trợ giúp & Hỗ trợ',
       description: 'Câu hỏi thường gặp',
@@ -285,14 +279,6 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
             );
           })}
         </div>
-      </div>
-
-      {/* Logout Button */}
-      <div className="px-4 mt-6">
-        <button className="w-full bg-card rounded-2xl p-4 flex items-center justify-center space-x-2 text-destructive font-medium shadow-sm hover:bg-accent transition-colors" onClick={onLogout}>
-          <LogOut className="w-5 h-5" />
-          <span>Đăng xuất</span>
-        </button>
       </div>
 
       {/* Version */}
