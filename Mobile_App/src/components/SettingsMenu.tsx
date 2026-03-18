@@ -6,9 +6,10 @@ interface SettingsMenuProps {
   onClose: () => void;
   onLogout: () => void;
   onProfileClick?: () => void;
+  onNavigate?: (page: string) => void;
 }
 
-export function SettingsMenu({ isOpen, onClose, onLogout, onProfileClick }: SettingsMenuProps) {
+export function SettingsMenu({ isOpen, onClose, onLogout, onProfileClick, onNavigate }: SettingsMenuProps) {
   const [userName, setUserName] = useState('Đang tải...');
 
   useEffect(() => {
@@ -26,6 +27,11 @@ export function SettingsMenu({ isOpen, onClose, onLogout, onProfileClick }: Sett
   const handleLogout = () => {
     onClose();
     onLogout();
+  };
+
+  const handleNav = (page: string) => {
+    onClose();
+    if (onNavigate) onNavigate(page);
   };
 
   return (
@@ -84,7 +90,10 @@ export function SettingsMenu({ isOpen, onClose, onLogout, onProfileClick }: Sett
         {/* Menu Items */}
         <div className="p-4 space-y-2">
           {/* Cấu hình */}
-          <button className="w-full bg-white rounded-2xl p-4 flex items-center justify-between hover:bg-gray-50 transition-colors shadow-sm">
+          <button 
+            onClick={() => handleNav('config')}
+            className="w-full bg-white rounded-2xl p-4 flex items-center justify-between hover:bg-gray-50 transition-colors shadow-sm"
+          >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-destructive/10 rounded-full flex items-center justify-center">
                 <Settings className="w-5 h-5 text-destructive" />
@@ -95,7 +104,10 @@ export function SettingsMenu({ isOpen, onClose, onLogout, onProfileClick }: Sett
           </button>
 
           {/* Cài đặt */}
-          <button className="w-full bg-white rounded-2xl p-4 flex items-center justify-between hover:bg-gray-50 transition-colors shadow-sm">
+          <button 
+            onClick={() => handleNav('settings')}
+            className="w-full bg-white rounded-2xl p-4 flex items-center justify-between hover:bg-gray-50 transition-colors shadow-sm"
+          >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-destructive/10 rounded-full flex items-center justify-center">
                 <Settings className="w-5 h-5 text-destructive" />

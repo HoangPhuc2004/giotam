@@ -415,6 +415,42 @@ def update_user_profile(user_id):
         db.session.rollback()
         return jsonify({'error': 'Lỗi cập nhật'}), 500
 
+@app.route('/users/<int:user_id>/change-password', methods=['POST'])
+def change_password(user_id):
+    user = User.query.get_or_404(user_id)
+    data = request.get_json()
+    
+    old_password = data.get('old_password')
+    new_password = data.get('new_password')
+    
+    if not old_password or not new_password:
+        return jsonify({'error': 'Vui lòng cung cấp mật khẩu cũ và mới'}), 400
+        
+    if user.password != old_password:
+        return jsonify({'error': 'Mật khẩu cũ không chính xác'}), 401
+        
+    try:
+        user.password = new_password
+        db.session.commit()
+        return jsonify({'message': 'Đổi mật khẩu thành công'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Lỗi rerver khi đổi mật khẩu'}), 500
+
+@app.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    try:
+        # Xóa các record liên quan trước (DonationRecord)
+        DonationRecord.query.filter_by(user_id=user_id).delete()
+        
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'message': 'Đã xóa tài khoản thành công'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Lỗi server khi xóa tài khoản'}), 500
+
 @app.route('/users/<int:user_id>/history', methods=['GET'])
 def get_user_donation_history(user_id):
     user = User.query.get(user_id)

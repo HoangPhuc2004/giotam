@@ -13,6 +13,9 @@ import { Header } from './components/Header';
 import { SettingsMenu } from './components/SettingsMenu';
 import { AdminDashboard } from './components/AdminDashboard';
 import { LeaderboardPage } from './components/LeaderboardPage';
+import { ConfigurationPage } from './components/ConfigurationPage';
+import { SettingsPage } from './components/SettingsPage';
+import { useEffect } from 'react';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,6 +24,13 @@ export default function App() {
   const [hasHealthDeclaration, setHasHealthDeclaration] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [userRole, setUserRole] = useState('donor');
+
+  useEffect(() => {
+    // Initialize theme
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
 
   // Show Auth screen if not logged in
   if (!isLoggedIn) {
@@ -95,6 +105,10 @@ export default function App() {
         return <Profile onLogout={handleLogout} onBack={() => setCurrentPage('home')} />;
       case 'leaderboard':
         return <LeaderboardPage onBack={() => setCurrentPage('home')} />;
+      case 'config':
+        return <ConfigurationPage onBack={() => setCurrentPage('home')} onLogout={handleLogout} />;
+      case 'settings':
+        return <SettingsPage onBack={() => setCurrentPage('home')} />;
       default:
         return <Home onNavigate={handleNavigate} />;
     }
@@ -119,6 +133,7 @@ export default function App() {
           isOpen={isSettingsOpen}
           onClose={() => setIsSettingsOpen(false)}
           onLogout={handleLogout}
+          onNavigate={handleNavigate}
           onProfileClick={() => {
             setCurrentPage('profile');
             setActiveTab('profile');
