@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { PageHeader } from './PageHeader';
 import { api } from '../api';
+import { ConfigurationPage } from './ConfigurationPage';
 
 interface ProfileProps {
   onLogout: () => void;
@@ -215,7 +216,12 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
     <>
       {/* Header */}
       <div className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-20 px-4">
-        <h1 className="text-xl font-bold mb-6">Tài khoản</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-xl font-bold">Tài khoản</h1>
+          <button onClick={() => setCurrentPage('settings')} className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors">
+            <Settings className="w-5 h-5" />
+          </button>
+        </div>
 
         {/* Profile Card */}
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4">
@@ -584,104 +590,9 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
   );
 
   const renderSettings = () => (
-    <>
-      {/* Header with Back Button */}
-      <div className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
-        <div className="flex items-center mb-4">
-          <button onClick={() => setCurrentPage('main')} className="mr-3">
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <h1 className="text-xl font-bold">Cài đặt</h1>
-        </div>
-      </div>
-
-      {/* Settings List */}
-      <div className="px-4 mt-6">
-        <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
-          {/* Notifications */}
-          <div className="p-4 border-b border-border">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Bell className="w-5 h-5 text-destructive" />
-                <div>
-                  <div className="font-medium text-card-foreground">Thông báo đẩy</div>
-                  <div className="text-xs text-muted-foreground">Nhận thông báo về đợt hiến máu</div>
-                </div>
-              </div>
-              <button
-                onClick={() => handleSettingToggle('notifications')}
-                className={`w-12 h-6 rounded-full transition-colors ${settings.notifications ? 'bg-destructive' : 'bg-gray-300'
-                  }`}
-              >
-                <div
-                  className={`w-5 h-5 bg-white rounded-full transition-transform ${settings.notifications ? 'translate-x-6' : 'translate-x-1'
-                    }`}
-                ></div>
-              </button>
-            </div>
-          </div>
-
-          {/* Email Notifications */}
-          <div className="p-4 border-b border-border">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-destructive" />
-                <div>
-                  <div className="font-medium text-card-foreground">Thông báo email</div>
-                  <div className="text-xs text-muted-foreground">Nhận email về hoạt động</div>
-                </div>
-              </div>
-              <button
-                onClick={() => handleSettingToggle('emailNotifications')}
-                className={`w-12 h-6 rounded-full transition-colors ${settings.emailNotifications ? 'bg-destructive' : 'bg-gray-300'
-                  }`}
-              >
-                <div
-                  className={`w-5 h-5 bg-white rounded-full transition-transform ${settings.emailNotifications ? 'translate-x-6' : 'translate-x-1'
-                    }`}
-                ></div>
-              </button>
-            </div>
-          </div>
-
-          {/* Language */}
-          <div className="p-4 border-b border-border">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Globe className="w-5 h-5 text-destructive" />
-                <div>
-                  <div className="font-medium text-card-foreground">Ngôn ngữ</div>
-                  <div className="text-xs text-muted-foreground">Tiếng Việt</div>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
-            </div>
-          </div>
-
-          {/* Privacy */}
-          <div className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Lock className="w-5 h-5 text-destructive" />
-                <div>
-                  <div className="font-medium text-card-foreground">Quyền riêng tư</div>
-                  <div className="text-xs text-muted-foreground">Quản lý dữ liệu cá nhân</div>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
-            </div>
-          </div>
-        </div>
-
-        {/* Danger Zone */}
-        <div className="mt-6 bg-card rounded-2xl shadow-sm p-4">
-          <h3 className="font-bold text-card-foreground mb-3">Vùng nguy hiểm</h3>
-          <button className="w-full p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 font-medium hover:bg-red-100 transition-colors">
-            Xóa tài khoản
-          </button>
-        </div>
-      </div>
-    </>
+    <div className="flex-1 w-full relative min-h-screen">
+      <ConfigurationPage onBack={() => setCurrentPage('main')} onLogout={onLogout} />
+    </div>
   );
 
   const renderHelp = () => (

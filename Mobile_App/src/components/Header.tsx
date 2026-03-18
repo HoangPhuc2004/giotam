@@ -1,4 +1,4 @@
-import { Search, Bell, Menu } from 'lucide-react';
+import { Bell } from 'lucide-react';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -20,16 +20,7 @@ export function Header({ onMenuClick }: HeaderProps) {
       {/* Action Buttons */}
       <div className="flex items-center gap-2">
         <button className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors">
-          <Search className="w-5 h-5" />
-        </button>
-        <button className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors">
           <Bell className="w-5 h-5" />
-        </button>
-        <button
-          onClick={onMenuClick}
-          className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
-        >
-          <Menu className="w-5 h-5" />
         </button>
       </div>
     </div>
