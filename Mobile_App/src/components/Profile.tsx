@@ -230,7 +230,7 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
   const renderMain = () => (
     <>
       {/* Header */}
-      <div className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-20 px-4">
+      <div className="sticky top-0 z-50 bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-20 px-4">
         <h1 className="text-xl font-bold mb-6">Tài khoản</h1>
 
         {/* Profile Card */}
@@ -327,7 +327,7 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
   const renderPersonalInfo = () => (
     <>
       {/* Header with Back Button */}
-      <div className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
+      <div className="sticky top-0 z-50 bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
         <div className="flex items-center mb-4">
           <button onClick={() => setCurrentPage('main')} className="mr-3">
             <ArrowLeft className="w-6 h-6" />
@@ -482,7 +482,7 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
   const renderHistory = () => (
     <>
       {/* Header with Back Button */}
-      <div className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
+      <div className="sticky top-0 z-50 bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
         <div className="flex items-center mb-4">
           <button onClick={() => setCurrentPage('main')} className="mr-3">
             <ArrowLeft className="w-6 h-6" />
@@ -551,7 +551,7 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
   const renderAchievements = () => (
     <>
       {/* Header with Back Button */}
-      <div className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
+      <div className="sticky top-0 z-50 bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
         <div className="flex items-center mb-4">
           <button onClick={() => setCurrentPage('main')} className="mr-3">
             <ArrowLeft className="w-6 h-6" />
@@ -608,7 +608,7 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
   const renderHelp = () => (
     <>
       {/* Header with Back Button */}
-      <div className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
+      <div className="sticky top-0 z-50 bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
         <div className="flex items-center mb-4">
           <button onClick={() => setCurrentPage('main')} className="mr-3">
             <ArrowLeft className="w-6 h-6" />

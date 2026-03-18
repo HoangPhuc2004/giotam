@@ -7,7 +7,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, onBack }: PageHeaderProps) {
   return (
-    <div className="bg-destructive px-4 pt-12 pb-4 flex items-center justify-center relative shadow-md flex-shrink-0">
+    <div className="sticky top-0 z-50 bg-destructive px-4 pt-12 pb-4 flex items-center justify-center relative shadow-md flex-shrink-0">
       <button
         onClick={onBack}
         className="absolute left-4 p-2 text-white z-10 hover:bg-white/10 rounded-full transition-colors flex items-center justify-center"

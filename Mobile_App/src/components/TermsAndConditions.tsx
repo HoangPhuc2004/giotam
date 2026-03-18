@@ -8,7 +8,7 @@ interface TermsAndConditionsProps {
 export function TermsAndConditions({ onBack }: TermsAndConditionsProps) {
   return (
     <div className="flex-1 w-full bg-muted min-h-full pb-6">
-      <div className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
+      <div className="sticky top-0 z-50 bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-6 px-4">
         <div className="flex items-center mb-4">
           <button onClick={onBack} className="mr-3">
             <ArrowLeft className="w-6 h-6" />

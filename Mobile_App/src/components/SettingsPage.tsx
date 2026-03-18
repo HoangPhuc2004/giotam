@@ -66,7 +66,7 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
   return (
     <div className="min-h-full bg-background flex flex-col w-full h-full">
       {/* Header */}
-      <div className="pt-12 pb-4 px-4 flex items-center justify-center relative bg-destructive shadow-md flex-shrink-0">
+      <div className="sticky top-0 z-50 pt-12 pb-4 px-4 flex items-center justify-center relative bg-destructive shadow-md flex-shrink-0">
         <button onClick={onBack} className="absolute left-4 p-2 text-white z-10 transition-colors hover:bg-white/10 rounded-full flex items-center justify-center">
           <ChevronLeft className="w-6 h-6" />
         </button>
