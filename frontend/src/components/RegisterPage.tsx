@@ -26,7 +26,7 @@ export default function RegisterPage(/* Bỏ props: { onRegister, onNavigate }: 
     password: '',
     confirmPassword: '',
     address: '', // Thêm địa chỉ
-    bloodType: 'Chưa biết', // Mặc định để tránh lỗi validation
+    bloodType: 'Khác', // Mặc định để tránh lỗi validation
     lastDonationDate: '',
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -164,6 +164,7 @@ export default function RegisterPage(/* Bỏ props: { onRegister, onNavigate }: 
                          <SelectItem value="B-">B-</SelectItem>
                          <SelectItem value="AB+">AB+</SelectItem>
                          <SelectItem value="AB-">AB-</SelectItem>
+                         <SelectItem value="Khác">Khác / Chưa biết</SelectItem>
                       </SelectContent>
                    </Select>
                </div>

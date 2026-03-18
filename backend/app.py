@@ -60,9 +60,40 @@ migrate = Migrate(app, db)
 
 
 # --- CẤU HÌNH EMAIL HỆ THỐNG ---
-# Đọc từ environment variables (ưu tiên) hoặc fallback sang giá trị mặc định
-SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'minhtuandoanxxx@gmail.com')
-APP_PASSWORD = os.environ.get('APP_PASSWORD', 'mavn ohfr xwtz cvgg')
+# Dùng Resend API (HTTPS) thay vì SMTP để tránh bị Render chặn
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')  # Domain mặc định Resend
+
+def send_email_via_resend(to_email, subject, html_body):
+    """Gửi email qua Resend API (dùng HTTPS, không cần SMTP)."""
+    import requests as req_lib
+    if not RESEND_API_KEY:
+        print("⚠️ RESEND_API_KEY chưa được cấu hình!")
+        return False
+    try:
+        res = req_lib.post(
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {RESEND_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "from": f"Giọt Ấm <{SENDER_EMAIL}>",
+                "to": [to_email],
+                "subject": subject,
+                "html": html_body
+            },
+            timeout=30
+        )
+        if res.status_code in [200, 201]:
+            print(f"✅ Resend OK → {to_email}")
+            return True
+        else:
+            print(f"❌ Resend lỗi {res.status_code}: {res.text[:200]}")
+            return False
+    except Exception as e:
+        print(f"❌ Resend exception: {e}")
+        return False
 
 # URL công khai của server (ngrok hoặc IP thực).
 # Thay đổi dòng này thành ngrok URL của bạn khi dùng điện thoại thực.
@@ -189,6 +220,14 @@ def register_donor():
             except (ValueError, TypeError):
                  return jsonify({'error': 'Định dạng ngày không hợp lệ'}), 400
 
+    blood_type = data.get('bloodType', '')
+    if len(blood_type) > 5:
+        # Nếu gửi lên "Chưa biết" (9 ký tự) thì đổi thành "Khác"
+        if blood_type == "Chưa biết":
+            blood_type = "Khác"
+        else:
+            blood_type = blood_type[:5]
+            
     # Tạo user mới
     new_user = User(
         name=data['fullName'],
@@ -199,7 +238,7 @@ def register_donor():
         address=address,
         lat=lat,
         lng=lng,
-        blood_type=data['bloodType'],
+        blood_type=blood_type,
         last_donation=last_donation_date
     )
 

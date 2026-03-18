@@ -24,7 +24,7 @@ export function Auth({ onLogin }: AuthProps) {
     password: '',
     confirmPassword: '',
     address: '',
-    bloodType: 'O',
+    bloodType: 'O+',
     agreeToTerms: false,
   });
 
@@ -258,7 +258,7 @@ export function Auth({ onLogin }: AuthProps) {
                         <option value="B-" className="text-black">Nhóm máu B-</option>
                         <option value="AB+" className="text-black">Nhóm máu AB+</option>
                         <option value="AB-" className="text-black">Nhóm máu AB-</option>
-                        <option value="Chưa biết" className="text-black">Chưa biết</option>
+                        <option value="Khác" className="text-black">Khác / Chưa biết</option>
                       </select>
                     </div>
 
