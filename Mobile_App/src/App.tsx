@@ -12,6 +12,7 @@ import { BottomNav } from './components/BottomNav';
 import { Header } from './components/Header';
 import { SettingsMenu } from './components/SettingsMenu';
 import { AdminDashboard } from './components/AdminDashboard';
+import { LeaderboardPage } from './components/LeaderboardPage';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -92,6 +93,8 @@ export default function App() {
         return <Donation onBack={() => setCurrentPage('home')} />;
       case 'profile':
         return <Profile onLogout={handleLogout} onBack={() => setCurrentPage('home')} />;
+      case 'leaderboard':
+        return <LeaderboardPage onBack={() => setCurrentPage('home')} />;
       default:
         return <Home onNavigate={handleNavigate} />;
     }

@@ -151,6 +151,13 @@ export function Home({ onNavigate }: HomeProps) {
             <Trophy className="w-6 h-6 text-yellow-500 fill-yellow-500" />
             Bảng vinh danh
           </h2>
+          <button 
+            onClick={() => onNavigate('leaderboard')}
+            className="text-destructive text-sm font-medium flex items-center gap-1"
+          >
+            Xem thêm
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
         
         <div className="bg-card rounded-3xl p-5 shadow-lg space-y-4">
