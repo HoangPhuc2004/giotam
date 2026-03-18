@@ -92,20 +92,20 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
                 <Bell className="w-5 h-5 text-green-500" />
               </div>
               <div className="flex flex-col">
-                <span className="font-medium text-foreground text-base">Nhận thông báo</span>
-                <span className="text-xs text-gray-500">Thông báo về lịch hiến máu khẩn cấp</span>
+                <span className="font-medium text-foreground text-base">Tắt thông báo</span>
+                <span className="text-xs text-gray-500">Chặn thông báo gửi đến thiết bị từ máy chủ</span>
               </div>
             </div>
             
             <button 
               onClick={handleToggleNotifications}
               className={`relative w-12 h-6 rounded-full transition-colors duration-300 border ${
-                notificationsEnabled ? 'bg-destructive border-destructive' : 'bg-transparent border-gray-300'
+                !notificationsEnabled ? 'bg-destructive border-destructive' : 'bg-transparent border-gray-300'
               }`}
             >
               <div 
                 className={`absolute top-[1px] left-[1px] w-[20px] h-[20px] rounded-full bg-white shadow-sm transition-transform duration-300 ${
-                  notificationsEnabled ? 'translate-x-[24px]' : 'translate-x-0 border border-gray-300'
+                  !notificationsEnabled ? 'translate-x-[24px]' : 'translate-x-0 border border-gray-300'
                 }`} 
               />
             </button>
