@@ -14,8 +14,16 @@ from geocoding_free import geocode_address
 
 # --- KHỞI TẠO VÀ CẤU HÌNH ---
 app = Flask(__name__)
-# Cấu hình CORS để cho phép Frontend (Web, Mobile) gọi API
-cors = CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+# Cấu hình CORS - liệt kê rõ các domain được phép gọi API
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:3000",
+    "https://giotam.vercel.app",
+    "https://giotam-frontend.vercel.app",
+    "https://giotam-mobile.vercel.app",
+]
+cors = CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 
 # --- DATABASE ---
 # Ưu tiên dùng DATABASE_URL từ môi trường (Render.com cung cấp)
