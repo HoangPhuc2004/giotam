@@ -1,9 +1,10 @@
-import { User, Heart, Award, Calendar, Settings, HelpCircle, LogOut, ChevronRight, ArrowLeft, Phone, Mail, MapPin, Edit, Bell, Lock, Globe, Check } from 'lucide-react';
+import { User, Heart, Award, Calendar, Settings, HelpCircle, LogOut, ChevronRight, ArrowLeft, Phone, Mail, MapPin, Edit, Bell, Lock, Globe, Check, FileText } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { PageHeader } from './PageHeader';
 import { api } from '../api';
 import { ConfigurationPage } from './ConfigurationPage';
+import { TermsAndConditions } from './TermsAndConditions';
 
 interface ProfileProps {
   onLogout: () => void;
@@ -115,6 +116,12 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
       description: 'Câu hỏi thường gặp',
       page: 'help',
     },
+    {
+      icon: FileText,
+      label: 'Điều khoản & điều kiện sử dụng',
+      description: 'Quy định sử dụng nền tảng',
+      page: 'terms',
+    },
   ];
 
   const donationsCountNum = parseInt(formData.donationsCount) || 0;
@@ -213,6 +220,8 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
         return renderSettings();
       case 'help':
         return renderHelp();
+      case 'terms':
+        return <TermsAndConditions onBack={() => setCurrentPage('main')} />;
       default:
         return renderMain();
     }
