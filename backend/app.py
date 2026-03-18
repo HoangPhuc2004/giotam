@@ -370,10 +370,9 @@ def notify_donors():
         users_to_notify = User.query.filter(User.id.in_(donor_ids)).all()
         success_count = 0
         
-        # Kết nối SMTP Gmail
-        print("🔌 Đang kết nối Gmail...")
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
+        # Kết nối SMTP Gmail (dùng port 465 SSL - tương thích với Render)
+        print("🔌 Đang kết nối Gmail SSL...")
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.login(SENDER_EMAIL, APP_PASSWORD)
         print("✅ Kết nối thành công!")
 
@@ -474,8 +473,7 @@ def contact_support():
     RECEIVER_EMAIL = SENDER_EMAIL 
 
     try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.login(SENDER_EMAIL, APP_PASSWORD)
 
         msg = MIMEMultipart()
