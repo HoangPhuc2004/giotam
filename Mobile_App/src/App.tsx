@@ -9,7 +9,6 @@ import { DonationHistory } from './components/DonationHistory';
 import { Hotline } from './components/Hotline';
 import { Auth } from './components/Auth';
 import { BottomNav } from './components/BottomNav';
-import { Header } from './components/Header';
 import { SettingsMenu } from './components/SettingsMenu';
 import { AdminDashboard } from './components/AdminDashboard';
 import { LeaderboardPage } from './components/LeaderboardPage';
@@ -122,7 +121,6 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="w-[393px] h-[852px] bg-background flex flex-col overflow-hidden relative">
-        <Header onMenuClick={() => setIsSettingsOpen(true)} />
         <div className="flex-1 overflow-y-auto pb-28">
           {renderContent()}
         </div>
