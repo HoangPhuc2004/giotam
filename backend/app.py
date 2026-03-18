@@ -359,6 +359,7 @@ def get_user_donation_history(user_id):
 
 @app.route('/notify_donors', methods=['POST'])
 def notify_donors():
+    import threading
     data = request.get_json()
     donor_ids = data.get('donor_ids')
     message_body = data.get('message')
@@ -368,92 +369,96 @@ def notify_donors():
 
     try:
         users_to_notify = User.query.filter(User.id.in_(donor_ids)).all()
-        success_count = 0
         
-        # Kết nối SMTP Gmail (dùng port 465 SSL - tương thích với Render)
-        print("🔌 Đang kết nối Gmail SSL...")
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login(SENDER_EMAIL, APP_PASSWORD)
-        print("✅ Kết nối thành công!")
-
-        print(f"📧 Đang gửi email tới {len(users_to_notify)} người...")
-
+        # Tạo DonationRecord PENDING đồng bộ trước khi trả response
         for user in users_to_notify:
             if user.email:
-                try:
-                    # Tạo DonationRecord PENDING ngay khi gửi mail
-                    # Điều này giúp Admin thấy được ai đã được gửi thông báo
-                    new_pending = DonationRecord(
-                        user_id=user.id,
-                        donation_date=datetime.now().date(),
-                        amount_ml=0,
-                        status='pending'
-                    )
-                    db.session.add(new_pending)
-                    
-                    msg = MIMEMultipart()
-                    msg['From'] = SENDER_EMAIL
-                    msg['To'] = user.email
-                    msg['Subject'] = f"🩸 KHẨN CẤP: CẦN MÁU NHÓM {user.blood_type} - GIỌT ẤM"
-
-                    # Nội dung HTML đẹp
-                    html_body = f"""
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <style>
-                            body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; }}
-                            .email-container {{ max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; }}
-                            .header {{ background-color: #930511; color: #ffffff; padding: 20px; text-align: center; }}
-                            .header h1 {{ margin: 0; }}
-                            .content {{ padding: 25px; }}
-                            .alert-box {{ background-color: #fbe4e6; border-left: 5px solid #930511; padding: 15px; margin: 20px 0; }}
-                            .alert-title {{ color: #930511; font-weight: bold; margin-top: 0; }}
-                            .btn-action {{ display: block; width: 200px; margin: 20px auto; padding: 12px; background-color: #930511; color: white !important; text-align: center; text-decoration: none; border-radius: 50px; font-weight: bold; }}
-                            .footer {{ background-color: #f9f9f9; padding: 15px; text-align: center; font-size: 12px; color: #888; }}
-                        </style>
-                    </head>
-                    <body>
-                        <div class="email-container">
-                            <div class="header">
-                                <h1>🩸 GIỌT ẤM</h1>
-                                <p>Kết nối yêu thương - Sẻ chia sự sống</p>
-                            </div>
-                            <div class="content">
-                                <p>Xin chào <strong>{user.name}</strong>,</p>
-                                <p>Hệ thống <strong>Giọt Ấm</strong> vừa nhận được thông báo khẩn cấp:</p>
-                                
-                                <div class="alert-box">
-                                    <p class="alert-title">📢 THÔNG BÁO CẦN MÁU</p>
-                                    <p>{message_body}</p>
-                                </div>
-
-                                <p>Sự giúp đỡ của bạn có thể cứu sống một mạng người. Hãy đến bệnh viện sớm nhất nếu có thể.</p>
-                                <a href="{BASE_URL}/participate?user_id={user.id}&ngrok-skip-browser-warning=true" class="btn-action" target="_blank">Tôi sẽ tham gia</a>
-                                <p>Trân trọng,<br>Đội ngũ Giọt Ấm</p>
-                            </div>
-                            <div class="footer">
-                                <p>Email tự động từ hệ thống Giọt Ấm.</p>
-                            </div>
-                        </div>
-                    </body>
-                    </html>
-                    """
-                    
-                    msg.attach(MIMEText(html_body, 'html'))
-                    server.send_message(msg)
-                    print(f"✅ Đã gửi cho {user.name}")
-                    success_count += 1
-                except Exception as e:
-                    print(f"⚠️ Lỗi gửi {user.name}: {e}")
-        
+                new_pending = DonationRecord(
+                    user_id=user.id,
+                    donation_date=datetime.now().date(),
+                    amount_ml=0,
+                    status='pending'
+                )
+                db.session.add(new_pending)
         db.session.commit()
-        server.quit()
-        return jsonify({'message': f'Đã gửi thành công {success_count} email và tạo các yêu cầu chờ.'}), 200
+
+        # Gửi email trong background thread để không block HTTP response
+        user_data = [(u.email, u.name, u.blood_type, u.id) for u in users_to_notify if u.email]
+
+        def send_emails_background(user_data, message_body):
+            try:
+                print("🔌 Đang kết nối Gmail SSL (background)...")
+                server = smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=60)
+                server.login(SENDER_EMAIL, APP_PASSWORD)
+                print("✅ Kết nối thành công!")
+
+                for email, name, blood_type, uid in user_data:
+                    try:
+                        msg = MIMEMultipart()
+                        msg['From'] = SENDER_EMAIL
+                        msg['To'] = email
+                        msg['Subject'] = f"🩸 KHẨN CẤP: CẦN MÁU NHÓM {blood_type} - GIỌT ẤM"
+
+                        html_body = f"""
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <style>
+                                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; }}
+                                .email-container {{ max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; }}
+                                .header {{ background-color: #930511; color: #ffffff; padding: 20px; text-align: center; }}
+                                .header h1 {{ margin: 0; }}
+                                .content {{ padding: 25px; }}
+                                .alert-box {{ background-color: #fbe4e6; border-left: 5px solid #930511; padding: 15px; margin: 20px 0; }}
+                                .alert-title {{ color: #930511; font-weight: bold; margin-top: 0; }}
+                                .footer {{ background-color: #f9f9f9; padding: 15px; text-align: center; font-size: 12px; color: #888; }}
+                            </style>
+                        </head>
+                        <body>
+                            <div class="email-container">
+                                <div class="header">
+                                    <h1>🩸 GIỌT ẤM</h1>
+                                    <p>Kết nối yêu thương - Sẻ chia sự sống</p>
+                                </div>
+                                <div class="content">
+                                    <p>Xin chào <strong>{name}</strong>,</p>
+                                    <p>Hệ thống <strong>Giọt Ấm</strong> vừa nhận được thông báo khẩn cấp:</p>
+                                    <div class="alert-box">
+                                        <p class="alert-title">📢 THÔNG BÁO CẦN MÁU</p>
+                                        <p>{message_body}</p>
+                                    </div>
+                                    <p>Sự giúp đỡ của bạn có thể cứu sống một mạng người. Hãy đến bệnh viện sớm nhất nếu có thể.</p>
+                                    <p>Trân trọng,<br>Đội ngũ Giọt Ấm</p>
+                                </div>
+                                <div class="footer">
+                                    <p>Email tự động từ hệ thống Giọt Ấm.</p>
+                                </div>
+                            </div>
+                        </body>
+                        </html>
+                        """
+                        msg.attach(MIMEText(html_body, 'html'))
+                        server.send_message(msg)
+                        print(f"✅ Đã gửi cho {name} ({email})")
+                    except Exception as e:
+                        print(f"⚠️ Lỗi gửi {name}: {e}")
+
+                server.quit()
+                print("📨 Hoàn tất gửi email background!")
+            except Exception as e:
+                print(f"❌ Lỗi SMTP background: {e}")
+
+        thread = threading.Thread(target=send_emails_background, args=(user_data, message_body), daemon=True)
+        thread.start()
+
+        return jsonify({
+            'message': f'Đã tạo {len(user_data)} yêu cầu chờ. Email đang được gửi trong nền.',
+            'count': len(user_data)
+        }), 200
 
     except Exception as e:
-        print(f"❌ Lỗi Server Mail: {e}")
-        return jsonify({'error': f'Lỗi hệ thống gửi mail: {str(e)}'}), 500
+        print(f"❌ Lỗi notify_donors: {e}")
+        return jsonify({'error': f'Lỗi hệ thống: {str(e)}'}), 500
 
 
 # --- XỬ LÝ FORM LIÊN HỆ (GỬI VỀ ADMIN) ---
