@@ -51,9 +51,9 @@ migrate = Migrate(app, db)
 
 
 # --- CẤU HÌNH EMAIL HỆ THỐNG ---
-# Đã điền sẵn thông tin của bạn
-SENDER_EMAIL = "minhtuandoanxxx@gmail.com"
-APP_PASSWORD = "mavn ohfr xwtz cvgg"
+# Đọc từ environment variables (ưu tiên) hoặc fallback sang giá trị mặc định
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'minhtuandoanxxx@gmail.com')
+APP_PASSWORD = os.environ.get('APP_PASSWORD', 'mavn ohfr xwtz cvgg')
 
 # URL công khai của server (ngrok hoặc IP thực).
 # Thay đổi dòng này thành ngrok URL của bạn khi dùng điện thoại thực.
@@ -454,7 +454,7 @@ def notify_donors():
 
     except Exception as e:
         print(f"❌ Lỗi Server Mail: {e}")
-        return jsonify({'error': 'Lỗi hệ thống gửi mail'}), 500
+        return jsonify({'error': f'Lỗi hệ thống gửi mail: {str(e)}'}), 500
 
 
 # --- XỬ LÝ FORM LIÊN HỆ (GỬI VỀ ADMIN) ---
