@@ -235,9 +235,25 @@ def create_alert():
     if not data.get('hospital_id') or not data.get('blood_type'):
         return jsonify({'error': 'Thiếu thông tin bệnh viện hoặc nhóm máu'}), 400
         
-    hospital = Hospital.query.get(data['hospital_id'])
-    if not hospital:
+    # Tìm bệnh viện từ bảng users (role='hospital')
+    hospital_user = User.query.filter_by(id=data['hospital_id'], role='hospital').first()
+    # Nếu không tìm thấy, thử admin (để admin cũng có thể test)
+    if not hospital_user:
+        hospital_user = User.query.filter_by(id=data['hospital_id']).first()
+    if not hospital_user:
         return jsonify({'error': 'Không tìm thấy bệnh viện'}), 404
+
+    # Tạo object tương thích với ai_filter (cần lat, lng, name)
+    class HospitalProxy:
+        def __init__(self, user):
+            self.id = user.id
+            self.name = user.name
+            self.lat = user.lat or 16.0544068  # Default: Đà Nẵng
+            self.lng = user.lng or 108.2021667
+        def to_dict(self):
+            return {'id': self.id, 'name': self.name, 'lat': self.lat, 'lng': self.lng}
+
+    hospital = HospitalProxy(hospital_user)
         
     blood_type_needed = data['blood_type']
     radius_km = data.get('radius_km', 10)
