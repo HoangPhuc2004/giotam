@@ -86,7 +86,9 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
             
             <button 
               onClick={handleToggleNotifications}
-              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${notificationsEnabled ? 'bg-black justify-end' : 'bg-red-500 justify-start'}`}
+              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center border border-black ${
+                notificationsEnabled ? 'bg-gray-900 justify-end' : 'bg-red-500 justify-start'
+              }`}
             >
               <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
             </button>
