@@ -144,6 +144,56 @@ export function Home({ onNavigate }: HomeProps) {
         </div>
       </div>
 
+      {/* Leaderboard Section */}
+      <div className="px-4 mt-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-destructive flex items-center gap-2">
+            <Trophy className="w-6 h-6 text-yellow-500 fill-yellow-500" />
+            Bảng vinh danh
+          </h2>
+        </div>
+        
+        <div className="bg-card rounded-3xl p-5 shadow-lg space-y-4">
+          {leaderboard.length > 0 ? leaderboard.map((donor, index) => {
+            let rankColor = "bg-muted text-muted-foreground";
+            let rankBg = "bg-destructive/5 rounded-2xl";
+            // Premium medal styling for top 3
+            if (index === 0) {
+              rankColor = "bg-yellow-100 text-yellow-600 border border-yellow-300 shadow-sm";
+              rankBg = "bg-gradient-to-r from-yellow-500/15 to-transparent border-l-4 border-yellow-500 rounded-xl";
+            } else if (index === 1) {
+              rankColor = "bg-gray-100 text-gray-600 border border-gray-300 shadow-sm";
+              rankBg = "bg-gradient-to-r from-gray-400/15 to-transparent border-l-4 border-gray-400 rounded-xl";
+            } else if (index === 2) {
+              rankColor = "bg-orange-100 text-[#CD7F32] border border-orange-300 shadow-sm";
+              rankBg = "bg-gradient-to-r from-orange-500/15 to-transparent border-l-4 border-[#CD7F32] rounded-xl";
+            }
+            
+            return (
+              <div key={donor.id || index} className={`flex items-center justify-between p-3 ${rankBg}`}>
+                <div className="flex items-center gap-3">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-sm ${rankColor}`}>
+                    {index + 1}
+                  </div>
+                  <div>
+                    <div className="font-bold text-foreground text-[15px]">{donor.name}</div>
+                    <div className="text-xs text-muted-foreground font-medium">{donor.donations_count} lần hiến máu</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-black text-destructive">{donor.reward_points} <span className="text-[10px] text-destructive/80 font-normal">pts</span></div>
+                  <div className="inline-block mt-0.5 px-2 py-0.5 bg-destructive/10 text-destructive text-[10px] font-bold rounded-full">
+                    Nhóm máu {donor.blood_type || '?'}
+                  </div>
+                </div>
+              </div>
+            );
+          }) : (
+            <div className="text-center py-4 text-muted-foreground text-sm">Chưa có dữ liệu vinh danh</div>
+          )}
+        </div>
+      </div>
+
       {/* Benefits Section */}
       <div className="px-4 mt-6">
         <h2 className="text-xl font-bold text-destructive mb-4">Lợi ích hiến máu</h2>
