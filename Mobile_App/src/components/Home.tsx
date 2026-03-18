@@ -1,11 +1,29 @@
-import { ClipboardList, Calendar, Phone, Clock, ChevronRight } from 'lucide-react';
+import { ClipboardList, Calendar, Phone, Clock, ChevronRight, Trophy } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useState, useEffect } from 'react';
+import { api } from '../api';
 
 interface HomeProps {
   onNavigate: (page: string) => void;
 }
 
 export function Home({ onNavigate }: HomeProps) {
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await api.get('/leaderboard');
+        if (res.data && res.data.leaderboard) {
+          setLeaderboard(res.data.leaderboard);
+        }
+      } catch (err) {
+        console.error("Failed to fetch leaderboard", err);
+      }
+    };
+    fetchLeaderboard();
+  }, []);
+
   const mainActions = [
     {
       id: 'health-declaration',

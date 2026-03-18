@@ -181,6 +181,31 @@ def get_hospitals():
     hospitals = Hospital.query.all()
     return jsonify({'count': len(hospitals), 'hospitals': [h.to_dict() for h in hospitals]})
 
+@app.route('/leaderboard', methods=['GET'])
+def get_leaderboard():
+    try:
+        # Lấy top 5 donors có donations_count cao nhất
+        top_donors = User.query.filter_by(role='donor').order_by(
+            User.donations_count.desc(), 
+            User.reward_points.desc()
+        ).limit(5).all()
+        
+        return jsonify({
+            'count': len(top_donors),
+            'leaderboard': [
+                {
+                    'id': d.id,
+                    'name': d.name,
+                    'donations_count': d.donations_count,
+                    'reward_points': d.reward_points,
+                    'blood_type': d.blood_type
+                } for d in top_donors
+            ]
+        }), 200
+    except Exception as e:
+        print(f"Lỗi Leaderboard: {e}")
+        return jsonify({'error': 'Lỗi lấy bảng vinh danh'}), 500
+
 
 # --- ĐĂNG KÝ & ĐĂNG NHẬP ---
 
