@@ -104,6 +104,12 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
       page: 'achievements',
     },
     {
+      icon: Settings,
+      label: 'Cài đặt',
+      description: 'Quản lý thông báo và bảo mật',
+      page: 'settings',
+    },
+    {
       icon: HelpCircle,
       label: 'Trợ giúp & Hỗ trợ',
       description: 'Câu hỏi thường gặp',
@@ -216,12 +222,7 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
     <>
       {/* Header */}
       <div className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground pt-8 pb-20 px-4">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-xl font-bold">Tài khoản</h1>
-          <button onClick={() => setCurrentPage('settings')} className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors">
-            <Settings className="w-5 h-5" />
-          </button>
-        </div>
+        <h1 className="text-xl font-bold mb-6">Tài khoản</h1>
 
         {/* Profile Card */}
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4">
