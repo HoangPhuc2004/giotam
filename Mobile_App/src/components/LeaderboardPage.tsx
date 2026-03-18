@@ -54,11 +54,11 @@ export function LeaderboardPage({ onBack }: LeaderboardPageProps) {
   return (
     <div className="min-h-full bg-background flex flex-col w-full h-full overflow-y-auto">
       {/* Header */}
-      <div className="pt-8 pb-2 px-4 flex items-center justify-center relative">
-        <button onClick={onBack} className="absolute left-4 p-2 text-foreground z-10">
+      <div className="pt-12 pb-4 px-4 flex items-center justify-center relative bg-destructive shadow-md flex-shrink-0">
+        <button onClick={onBack} className="absolute left-4 p-2 text-white z-10 hover:bg-white/10 rounded-full transition-colors">
           <ChevronLeft className="w-6 h-6" />
         </button>
-        <h1 className="text-[22px] font-black text-destructive tracking-wide">Bảng Vinh Danh</h1>
+        <h1 className="text-xl font-bold text-white tracking-wide uppercase">Bảng Vinh Danh</h1>
       </div>
 
       {/* Podium & Tabs */}

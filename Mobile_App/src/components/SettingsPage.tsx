@@ -66,11 +66,11 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
   return (
     <div className="min-h-full bg-background flex flex-col w-full h-full">
       {/* Header */}
-      <div className="pt-12 pb-4 px-4 flex items-center justify-center relative bg-white border-b border-gray-100">
-        <button onClick={onBack} className="absolute left-4 p-2 text-foreground z-10 transition-colors hover:bg-gray-100 rounded-full">
+      <div className="pt-12 pb-4 px-4 flex items-center justify-center relative bg-destructive shadow-md flex-shrink-0">
+        <button onClick={onBack} className="absolute left-4 p-2 text-white z-10 transition-colors hover:bg-white/10 rounded-full flex items-center justify-center">
           <ChevronLeft className="w-6 h-6" />
         </button>
-        <h1 className="text-xl font-bold text-destructive tracking-wide uppercase">Cài đặt</h1>
+        <h1 className="text-xl font-bold text-white tracking-wide uppercase">Cài đặt</h1>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
