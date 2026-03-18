@@ -2,6 +2,7 @@ import { User, Heart, Award, Calendar, Settings, HelpCircle, LogOut, ChevronRigh
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { PageHeader } from './PageHeader';
+import { api } from '../api';
 
 interface ProfileProps {
   onLogout: () => void;
@@ -11,6 +12,8 @@ interface ProfileProps {
 export function Profile({ onLogout, onBack }: ProfileProps) {
   const [currentPage, setCurrentPage] = useState<string>('main');
   const [isEditing, setIsEditing] = useState(false);
+  const [historyRecords, setHistoryRecords] = useState<any[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   // Tạo khung dữ liệu trống ban đầu
   const [formData, setFormData] = useState({
     name: 'Đang tải...',
@@ -42,8 +45,31 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
         donationsCount: userData.donations_count?.toString() || '0',
         rewardPoints: userData.reward_points?.toString() || '0'
       }));
+
+      // Gọi API lấy lịch sử hiến máu
+      const fetchHistory = async () => {
+        setIsLoadingHistory(true);
+        try {
+          const res = await api.get(`/users/${userData.id}/history`);
+          if (res.data && res.data.history) {
+            setHistoryRecords(res.data.history);
+          }
+        } catch (error) {
+          console.error("Lỗi lấy lịch sử:", error);
+        } finally {
+          setIsLoadingHistory(false);
+        }
+      };
+      
+      fetchHistory();
     }
   }, []);
+
+  const formatDate = (isoStr: string) => {
+    if (!isoStr) return '';
+    const date = new Date(isoStr);
+    return date.toLocaleDateString('vi-VN');
+  };
 
   const [settings, setSettings] = useState({
     notifications: true,
@@ -84,42 +110,36 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
     },
   ];
 
-  const donationHistory = [
-    { date: '15/12/2025', location: 'Bệnh viện Chợ Rẫy', type: 'Hiến máu toàn phần', amount: '350ml', status: 'Hoàn thành' },
-    { date: '15/09/2025', location: 'Viện Huyết học Truyền máu TW', type: 'Hiến tiểu cầu', amount: '450ml', status: 'Hoàn thành' },
-    { date: '15/06/2025', location: 'Bệnh viện Nhân dân 115', type: 'Hiến máu toàn phần', amount: '350ml', status: 'Hoàn thành' },
-    { date: '15/03/2025', location: 'Bệnh viện Đại học Y Dược', type: 'Hiến máu toàn phần', amount: '350ml', status: 'Hoàn thành' },
-    { date: '15/12/2024', location: 'Bệnh viện Chợ Rẫy', type: 'Hiến tiểu cầu', amount: '450ml', status: 'Hoàn thành' },
-  ];
+  const donationsCountNum = parseInt(formData.donationsCount) || 0;
 
   const achievements = [
     {
       title: 'Người hùng hiến máu',
       description: 'Hiến máu lần đầu tiên',
-      date: '06/2023',
+      date: donationsCountNum >= 1 ? 'Đã đạt' : null,
       icon: '🏅',
-      unlocked: true,
+      unlocked: donationsCountNum >= 1,
     },
     {
       title: 'Chiến binh cứu người',
       description: 'Hiến máu 5 lần',
-      date: '03/2025',
+      date: donationsCountNum >= 5 ? 'Đã đạt' : null,
       icon: '⭐',
-      unlocked: true,
+      unlocked: donationsCountNum >= 5,
     },
     {
       title: 'Anh hùng máu vàng',
       description: 'Hiến máu 10 lần',
-      date: null,
+      date: donationsCountNum >= 10 ? 'Đã đạt' : null,
       icon: '🏆',
-      unlocked: false,
+      unlocked: donationsCountNum >= 10,
     },
     {
       title: 'Thiên thần cứu trợ',
       description: 'Hiến tiểu cầu 3 lần',
-      date: '09/2025',
+      date: null,
       icon: '👼',
-      unlocked: true,
+      unlocked: false,
     },
     {
       title: 'Đại sứ nhân đạo',
@@ -458,34 +478,38 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
       {/* History List */}
       <div className="px-4 mt-6">
         <div className="space-y-4">
-          {donationHistory.map((donation, index) => (
-            <div key={index} className="bg-card rounded-xl shadow-sm p-4">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center">
-                    <Heart className="w-6 h-6 text-destructive" />
+          {isLoadingHistory ? (
+            <div className="text-center text-muted-foreground py-4">Đang tải lịch sử...</div>
+          ) : historyRecords.length === 0 ? (
+            <div className="text-center text-muted-foreground py-4">Chưa có lịch sử hiến máu</div>
+          ) : (
+            historyRecords.map((donation, index) => (
+              <div key={index} className="bg-card rounded-xl shadow-sm p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center">
+                      <Heart className="w-6 h-6 text-destructive" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-card-foreground">Hiến máu</h3>
+                      <p className="text-sm text-muted-foreground">{formatDate(donation.donation_date)}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-card-foreground">{donation.type}</h3>
-                    <p className="text-sm text-muted-foreground">{donation.date}</p>
-                  </div>
+                  <span className={`text-xs px-2 py-1 rounded-full ${donation.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                    {donation.status === 'completed' ? 'Hoàn thành' : 'Chờ xác nhận'}
+                  </span>
                 </div>
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                  {donation.status}
-                </span>
-              </div>
-              <div className="space-y-1 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Địa điểm:</span>
-                  <span className="text-card-foreground">{donation.location}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Số lượng:</span>
-                  <span className="text-card-foreground font-medium">{donation.amount}</span>
+                <div className="space-y-1 text-sm">
+                  {donation.amount_ml > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Lượng máu:</span>
+                      <span className="text-card-foreground font-medium">{donation.amount_ml}ml</span>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         {/* Total Stats */}
@@ -493,11 +517,13 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
           <h3 className="font-bold mb-4">Tổng kết</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-2xl font-bold">8 lần</div>
+              <div className="text-2xl font-bold">{formData.donationsCount} lần</div>
               <div className="text-sm opacity-90">Tổng số lần hiến</div>
             </div>
             <div>
-              <div className="text-2xl font-bold">2,100ml</div>
+              <div className="text-2xl font-bold">
+                {historyRecords.filter(r => r.status === 'completed').reduce((sum, r) => sum + (r.amount_ml || 0), 0)}ml
+              </div>
               <div className="text-sm opacity-90">Tổng lượng máu</div>
             </div>
           </div>
@@ -548,9 +574,9 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
         {/* Progress Card */}
         <div className="mt-6 bg-gradient-to-br from-destructive to-destructive/80 rounded-2xl p-6 text-destructive-foreground shadow-lg">
           <h3 className="font-bold mb-2">Tiến độ của bạn</h3>
-          <p className="text-sm opacity-90 mb-4">Bạn đã mở khóa 4/5 huy hiệu</p>
+          <p className="text-sm opacity-90 mb-4">Bạn đã mở khóa {achievements.filter(a => a.unlocked).length}/{achievements.length} huy hiệu</p>
           <div className="w-full bg-white/20 rounded-full h-2">
-            <div className="bg-white rounded-full h-2" style={{ width: '80%' }}></div>
+            <div className="bg-white rounded-full h-2" style={{ width: `${(achievements.filter(a => a.unlocked).length / achievements.length) * 100}%` }}></div>
           </div>
         </div>
       </div>
