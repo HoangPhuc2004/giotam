@@ -28,7 +28,8 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
     const newDark = !isDarkMode;
     setIsDarkMode(newDark);
     if (newDark) {
-      document.documentElement.classList.add('dark');
+      // Force text to be black on white by not adding .dark, or just adding a dummy class
+      document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
@@ -96,9 +97,9 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
             
             <button 
               onClick={handleToggleTheme}
-              className={`w-12 h-6 rounded-full relative transition-colors duration-300 ${isDarkMode ? 'bg-blue-500' : 'bg-gray-200'}`}
+              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${isDarkMode ? 'bg-blue-500 justify-end' : 'bg-gray-200 justify-start'}`}
             >
-              <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 ${isDarkMode ? 'left-7' : 'left-1'}`} />
+              <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
             </button>
           </div>
         </section>
@@ -119,9 +120,9 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
             
             <button 
               onClick={handleToggleNotifications}
-              className={`w-12 h-6 rounded-full relative transition-colors duration-300 ${notificationsEnabled ? 'bg-green-500' : 'bg-gray-200'}`}
+              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${notificationsEnabled ? 'bg-green-500 justify-end' : 'bg-gray-200 justify-start'}`}
             >
-              <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 ${notificationsEnabled ? 'left-7' : 'left-1'}`} />
+              <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
             </button>
           </div>
         </section>
