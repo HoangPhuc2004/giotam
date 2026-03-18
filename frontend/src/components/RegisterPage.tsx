@@ -66,7 +66,7 @@ export default function RegisterPage(/* Bỏ props: { onRegister, onNavigate }: 
 
     try {
       // Gọi API backend
-      const response = await fetch('http://localhost:5000/register_donor', { // Đảm bảo URL đúng
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/register_donor`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

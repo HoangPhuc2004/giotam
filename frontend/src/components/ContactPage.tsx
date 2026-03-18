@@ -33,7 +33,7 @@ export default function ContactPage() {
     setIsSubmitting(true); // Bật loading
 
     try {
-      const response = await fetch('http://localhost:5000/contact_support', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/contact_support`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

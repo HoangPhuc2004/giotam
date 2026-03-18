@@ -73,7 +73,7 @@ export default function HospitalAccount() {
        };
 
        try {
-           const response = await fetch('http://localhost:5000/create_alert', {
+           const response = await fetch(`${import.meta.env.VITE_API_URL}/create_alert`, {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify(searchPayload),
@@ -137,7 +137,7 @@ export default function HospitalAccount() {
     // --- KẾT THÚC TẠO TIN NHẮN ---
 
     try {
-      const response = await fetch('http://localhost:5000/notify_donors', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/notify_donors`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
