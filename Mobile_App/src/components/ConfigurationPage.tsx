@@ -61,8 +61,8 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
   return (
     <div className="min-h-full bg-background flex flex-col w-full h-full relative">
       {/* Header */}
-      <div className="pt-12 pb-4 px-4 flex items-center justify-center relative bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800">
-        <button onClick={onBack} className="absolute left-4 p-2 text-foreground z-10 transition-colors hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full">
+      <div className="pt-12 pb-4 px-4 flex items-center justify-center relative bg-white border-b border-gray-100">
+        <button onClick={onBack} className="absolute left-4 p-2 text-foreground z-10 transition-colors hover:bg-gray-100 rounded-full">
           <ChevronLeft className="w-6 h-6" />
         </button>
         <h1 className="text-xl font-bold text-destructive tracking-wide uppercase">Cấu hình</h1>
@@ -72,15 +72,15 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
 
         {/* Notifications */}
         <section>
-          <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Thông báo</h2>
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-gray-50 dark:border-slate-700 flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Thông báo</h2>
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
                 <Bell className="w-5 h-5 text-green-500" />
               </div>
               <div className="flex flex-col">
                 <span className="font-medium text-foreground text-base">Nhận thông báo</span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">Thông báo về lịch hiến máu khẩn cấp</span>
+                <span className="text-xs text-gray-500">Thông báo về lịch hiến máu khẩn cấp</span>
               </div>
             </div>
             
@@ -95,10 +95,10 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
 
         {/* Account Danger Zone */}
         <section className="pt-6">
-          <h2 className="text-sm font-semibold text-red-500 dark:text-red-400 uppercase tracking-wider mb-3">Vùng nguy hiểm</h2>
+          <h2 className="text-sm font-semibold text-red-500 uppercase tracking-wider mb-3">Vùng nguy hiểm</h2>
           <button 
             onClick={() => setShowDeleteAlert(true)}
-            className="w-full bg-white dark:bg-slate-800 rounded-2xl p-4 border-2 border-red-500 flex items-center justify-between shadow-sm hover:bg-red-50 dark:hover:bg-slate-700 transition-colors group"
+            className="w-full bg-white rounded-2xl p-4 border-2 border-red-500 flex items-center justify-between shadow-sm hover:bg-red-50 transition-colors group"
           >
             <div className="flex flex-col text-left">
               <span className="font-semibold text-red-600 text-base">Xóa tài khoản</span>
@@ -115,15 +115,15 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
       {/* Notification Alert Dialog */}
       {showNotificationAlert && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-sm shadow-xl animate-in fade-in zoom-in duration-200 border dark:border-slate-700">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-in fade-in zoom-in duration-200">
             <h3 className="text-lg font-bold text-foreground mb-2">Tắt Thông báo?</h3>
-            <p className="text-gray-600 dark:text-gray-300 text-sm mb-6">
+            <p className="text-gray-600 text-sm mb-6">
               Nếu tắt thông báo, bạn sẽ không thể nhận thông báo hiến máu khẩn cấp. Bạn vẫn muốn tắt chứ?
             </p>
             <div className="flex gap-3">
               <button 
                 onClick={() => setShowNotificationAlert(false)}
-                className="flex-1 py-3 px-4 bg-gray-100 dark:bg-slate-700 text-foreground rounded-xl font-bold hover:bg-gray-200 dark:hover:bg-slate-600"
+                className="flex-1 py-3 px-4 bg-gray-100 text-foreground rounded-xl font-bold hover:bg-gray-200"
               >
                 Hủy
               </button>
@@ -141,26 +141,26 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
       {/* Delete Account Alert Dialog */}
       {showDeleteAlert && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-sm shadow-2xl animate-in fade-in zoom-in duration-200 border-2 border-red-100 dark:border-red-900/50">
-            <div className="w-12 h-12 bg-red-100 dark:bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-               <Trash2 className="w-6 h-6 text-red-600 dark:text-red-500" />
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl animate-in fade-in zoom-in duration-200 border-2 border-red-100">
+            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+               <Trash2 className="w-6 h-6 text-red-600" />
             </div>
             <h3 className="text-xl font-black text-center text-foreground mb-2">Xóa Tài Khoản Vĩnh Viễn</h3>
-            <p className="text-gray-600 dark:text-gray-300 text-sm mb-6 text-center leading-relaxed">
+            <p className="text-gray-600 text-sm mb-6 text-center leading-relaxed">
               Toàn bộ dữ liệu, lịch sử hiến máu và điểm tích lũy của bạn sẽ bị xóa hoàn toàn. Bạn chắc chắn muốn tiếp tục?
             </p>
             <div className="flex flex-col gap-3">
               <button 
                 onClick={handleDeleteAccount}
                 disabled={isDeleting}
-                className="w-full py-3.5 px-4 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 shadow-md shadow-red-600/20 flex justify-center items-center"
+                className="w-full py-3.5 px-4 bg-destructive text-white rounded-xl font-bold hover:bg-destructive/90 shadow-md shadow-destructive/20 flex justify-center items-center"
               >
                 {isDeleting ? 'Đang xóa...' : 'Xác nhận Xóa'}
               </button>
               <button 
                 onClick={() => setShowDeleteAlert(false)}
                 disabled={isDeleting}
-                className="w-full py-3 px-4 bg-gray-50 dark:bg-slate-700/50 dark:text-slate-300 text-gray-700 rounded-xl font-bold hover:bg-gray-100 dark:hover:bg-slate-700"
+                className="w-full py-3 px-4 bg-gray-50 text-gray-700 rounded-xl font-bold hover:bg-gray-100"
               >
                 Hủy, tôi giữ lại
               </button>
