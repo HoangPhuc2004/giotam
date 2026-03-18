@@ -20,6 +20,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:5174",
     "http://localhost:3000",
     "https://giotam.vercel.app",
+    "https://giotam-re7l.vercel.app",
     "https://giotam-frontend.vercel.app",
     "https://giotam-mobile.vercel.app",
 ]
