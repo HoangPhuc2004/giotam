@@ -65,6 +65,8 @@
   }
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer theme {
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
