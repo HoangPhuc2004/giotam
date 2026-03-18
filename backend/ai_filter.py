@@ -48,6 +48,15 @@ def filter_nearby_users(hospital, users, radius_km=10):
     results = []
     
     for user in users:
+        # Nếu donor không có tọa độ, vẫn giữ lại với khoảng cách mặc định lớn
+        if user.lat is None or user.lng is None:
+            results.append({
+                'user': user,
+                'distance': 999.0,
+                'ai_score': 0.3  # Điểm cơ bản khi không có tọa độ
+            })
+            continue
+
         user_coords = (user.lat, user.lng)
         distance = calculate_distance(user_coords, hospital_coords)
         

@@ -258,13 +258,23 @@ def create_alert():
     blood_type_needed = data['blood_type']
     radius_km = data.get('radius_km', 10)
     
-    # Lấy danh sách donor phù hợp sơ bộ (cùng nhóm máu, có tọa độ)
+    # Lấy danh sách donor phù hợp sơ bộ (cùng nhóm máu)
+    # Không yêu cầu lat/lng để không bỏ sót donor chưa có tọa độ
     suitable_users = User.query.filter(
         User.role == 'donor',
-        User.lat.isnot(None),
-        User.lng.isnot(None),
         User.blood_type == blood_type_needed
     ).all()
+
+    # Thử geocode cho donor chưa có tọa độ
+    for u in suitable_users:
+        if u.lat is None and u.address:
+            try:
+                coords = geocode_address(u.address)
+                if coords:
+                    u.lat, u.lng = coords
+                    db.session.commit()
+            except Exception:
+                pass
     
     try:
         # Gọi thuật toán lọc (file ai_filter.py)
