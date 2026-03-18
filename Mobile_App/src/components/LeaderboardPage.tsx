@@ -54,23 +54,21 @@ export function LeaderboardPage({ onBack }: LeaderboardPageProps) {
   return (
     <div className="min-h-full bg-background flex flex-col w-full h-full overflow-y-auto">
       {/* Header */}
-      <div className="pt-12 pb-4 px-4 flex justify-center relative">
-        <button onClick={onBack} className="absolute left-4 top-12 p-2 text-foreground z-10">
+      <div className="pt-8 pb-2 px-4 flex items-center justify-center relative">
+        <button onClick={onBack} className="absolute left-4 p-2 text-foreground z-10">
           <ChevronLeft className="w-6 h-6" />
         </button>
-        <div className="text-center flex flex-col items-center">
-          <h1 className="text-[26px] font-black text-destructive tracking-wide mt-2">Bảng Vinh Danh</h1>
-        </div>
+        <h1 className="text-[22px] font-black text-destructive tracking-wide">Bảng Vinh Danh</h1>
       </div>
 
       {/* Podium & Tabs */}
-      <div className="px-4 mt-6 flex flex-col items-center">
+      <div className="px-4 mt-8 flex flex-col items-center">
         {/* Podium */}
-        <div className="flex items-end justify-center gap-[6px] mb-8 w-full max-w-sm px-4">
+        <div className="flex items-end justify-center gap-[6px] mb-8 w-full max-w-sm px-2">
           <div className="flex-1 flex flex-col items-center text-center">
             {top3[1] && (
               <>
-                <div className="w-[72px] h-[72px] bg-white border border-gray-100 shadow-[0_4px_15px_rgba(0,0,0,0.05)] rounded-full flex items-center justify-center mb-3">
+                <div className="w-[72px] h-[72px] flex-shrink-0 aspect-square bg-white border border-gray-100 shadow-[0_4px_15px_rgba(0,0,0,0.05)] rounded-full flex items-center justify-center mb-3">
                   <span className="font-extrabold text-2xl text-foreground">2</span>
                 </div>
                 <div className="mb-px w-full flex justify-center">
@@ -81,10 +79,10 @@ export function LeaderboardPage({ onBack }: LeaderboardPageProps) {
             )}
           </div>
           
-          <div className="flex-1 flex flex-col items-center -mt-8 text-center pb-4">
+          <div className="flex-[1.2] flex flex-col items-center -mt-8 text-center pb-4">
             {top3[0] && (
               <>
-                <div className="w-[96px] h-[96px] bg-white border border-gray-100 shadow-[0_8px_25px_rgba(0,0,0,0.08)] rounded-full flex items-center justify-center mb-3">
+                <div className="w-[96px] h-[96px] flex-shrink-0 aspect-square bg-white border border-gray-100 shadow-[0_8px_25px_rgba(0,0,0,0.08)] rounded-full flex items-center justify-center mb-3">
                   <span className="font-black text-4xl text-foreground">1</span>
                 </div>
                 <div className="mb-1 w-full flex justify-center">
@@ -98,7 +96,7 @@ export function LeaderboardPage({ onBack }: LeaderboardPageProps) {
           <div className="flex-1 flex flex-col items-center text-center">
             {top3[2] && (
               <>
-                <div className="w-[72px] h-[72px] bg-white border border-gray-100 shadow-[0_4px_15px_rgba(0,0,0,0.05)] rounded-full flex items-center justify-center mb-3">
+                <div className="w-[72px] h-[72px] flex-shrink-0 aspect-square bg-white border border-gray-100 shadow-[0_4px_15px_rgba(0,0,0,0.05)] rounded-full flex items-center justify-center mb-3">
                   <span className="font-extrabold text-2xl text-gray-400">3</span>
                 </div>
                 <div className="mb-px w-full flex justify-center">
@@ -128,12 +126,7 @@ export function LeaderboardPage({ onBack }: LeaderboardPageProps) {
       </div>
 
       {/* List container */}
-      <div className="flex-1 bg-white mt-10 px-4 pb-24 border-t border-gray-100 pt-6">
-        <h2 className="text-2xl font-bold text-destructive flex items-center gap-2 mb-6">
-          <Trophy className="w-8 h-8 text-yellow-500 fill-yellow-500" />
-          Bảng vinh danh
-        </h2>
-
+      <div className="flex-1 bg-white mt-8 px-4 pb-24 border-t border-gray-100 pt-6">
         <div className="space-y-4">
           {rest.map((donor, index) => {
             const isFirst = index === 0;
