@@ -298,7 +298,7 @@ def create_alert():
 def update_user_profile(user_id):
     user = User.query.get_or_404(user_id)
     data = request.get_json()
-    allowed_fields = ['name', 'phone', 'address', 'blood_type', 'last_donation']
+    allowed_fields = ['name', 'phone', 'address', 'blood_type', 'last_donation', 'lat', 'lng', 'reward_points']
     
     geocoding_needed = False
     old_address = user.address
