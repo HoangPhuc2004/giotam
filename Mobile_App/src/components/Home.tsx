@@ -160,7 +160,7 @@ export function Home({ onNavigate }: HomeProps) {
           </button>
         </div>
         
-        <div className="bg-card rounded-3xl p-5 shadow-lg space-y-4">
+        <div className="bg-card rounded-3xl p-5 shadow-lg space-y-5">
           {leaderboard.length > 0 ? leaderboard.map((donor, index) => {
             let rankColor = "bg-muted text-muted-foreground";
             let rankBg = "bg-destructive/5 rounded-2xl";
@@ -177,9 +177,9 @@ export function Home({ onNavigate }: HomeProps) {
             }
             
             return (
-              <div key={donor.id || index} className={`flex items-center justify-between p-3 ${rankBg}`}>
-                <div className="flex items-center gap-3 flex-1 min-w-0 pr-2">
-                  <div className={`w-9 h-9 flex-shrink-0 rounded-full flex items-center justify-center font-black text-sm ${rankColor}`}>
+              <div key={donor.id || index} className={`flex items-center justify-between p-4 ${rankBg}`}>
+                <div className="flex items-center gap-4 flex-1 min-w-0 pr-2">
+                  <div className={`w-10 h-10 flex-shrink-0 aspect-square rounded-full flex items-center justify-center font-black text-base ${rankColor}`}>
                     {index + 1}
                   </div>
                   <div className="flex flex-col min-w-0">
