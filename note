@@ -1,0 +1,42 @@
+PS D:\Downloads\HK1 2025-2026 Minh Tuấn\Code\backend> .\venv\Scripts\Activate.ps1
+(venv) PS D:\Downloads\HK1 2025-2026 Minh Tuấn\Code\backend> python app.py
+
+frontend là mở kiểu z: 
+npm run dev
+
+Việc 2: Chạy đường hầm Ngrok
+Bây giờ file app.py đang chạy ở cổng 5000, ta cần dùng Ngrok để đưa cổng 5000 này lên mạng.
+Bạn có 2 cách để làm:
+
+Cách 1 (Dùng luôn cái bảng đen ngrok.exe bạn đang mở):
+Ngay tại cái cửa sổ đen mà bạn vừa nhập token thành công đó, bạn gõ lệnh:
+ngrok http 5000
+rồi ấn Enter.
+
+Cách 2 (Làm luôn trong VS Code cho gọn):
+Trong VS Code, bạn bấm dấu + ở góc phải của khu vực Terminal để mở thêm một cái Terminal thứ hai (song song với cái đang chạy app.py).
+Ở Terminal mới này, bạn gõ:
+ngrok http 5000
+rồi ấn Enter.
+
+Họ và tên: Trần Văn Test
+
+Số điện thoại: 0987654321
+
+Email: tranvantest@email.com
+
+Địa chỉ: 182 Lê Đại Hành, Phường 15, Quận 11, TP.HCM (Cố gắng nhập địa chỉ rõ ràng nhé)
+
+Mật khẩu: password123
+
+Xác nhận mật khẩu: password123
+
+Nhóm máu: Chọn một nhóm bất kỳ (ví dụ: A+)
+
+Ngày hiến máu gần nhất: Có thể để trống hoặc chọn một ngày trong quá khứ (ví dụ: 15/05/2025)
+
+
+Thao tác để có thể bật lên đc apk:
+1 chạy backend
+2 chạy ngrok
+3 chạy frontend của cái web nếu muốn test

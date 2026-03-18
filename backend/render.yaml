@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: giotam-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements-render.txt && python startup.py
+    startCommand: gunicorn app:app
+    envVars:
+      - key: BASE_URL
+        value: https://giotam-backend.onrender.com

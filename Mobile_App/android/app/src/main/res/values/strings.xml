@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Giọt Ấm</string>
+    <string name="title_activity_main">Giọt Ấm</string>
+    <string name="package_name">com.giotam.app</string>
+    <string name="custom_url_scheme">com.giotam.app</string>
+</resources>
