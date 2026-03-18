@@ -99,13 +99,13 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
             
             <button 
               onClick={handleToggleNotifications}
-              className={`w-12 h-6 rounded-full transition-colors duration-300 flex items-center p-[2px] ${
+              className={`w-12 h-6 rounded-full transition-colors duration-300 flex items-center p-0.5 ${
                 !notificationsEnabled ? 'bg-destructive' : 'bg-gray-300'
               }`}
             >
               <div 
-                className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300 ${
-                  !notificationsEnabled ? 'translate-x-[24px]' : 'translate-x-0'
+                className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300 transform ${
+                  !notificationsEnabled ? 'translate-x-6' : 'translate-x-0'
                 }`} 
               />
             </button>
