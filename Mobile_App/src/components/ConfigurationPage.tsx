@@ -1,4 +1,4 @@
-import { ChevronLeft, Moon, Bell, Trash2 } from 'lucide-react';
+import { ChevronLeft, Bell, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 
@@ -8,33 +8,20 @@ interface ConfigurationPageProps {
 }
 
 export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [showNotificationAlert, setShowNotificationAlert] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    // Check initial dark mode state
-    const isDark = document.documentElement.classList.contains('dark') || localStorage.getItem('theme') === 'dark';
-    setIsDarkMode(isDark);
+    // Clean up any previously set dark mode state
+    document.documentElement.classList.remove('dark');
+    localStorage.removeItem('theme');
 
     // Initial notifications state
     const notifs = localStorage.getItem('notifications_enabled');
     if (notifs === 'false') setNotificationsEnabled(false);
   }, []);
-
-  const handleToggleTheme = () => {
-    const newDark = !isDarkMode;
-    setIsDarkMode(newDark);
-    if (newDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  };
 
   const handleToggleNotifications = () => {
     if (notificationsEnabled) {
@@ -82,26 +69,6 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
-        
-        {/* Appearance */}
-        <section>
-          <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Hiển thị</h2>
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-gray-50 dark:border-slate-700 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-                <Moon className="w-5 h-5 text-blue-500" />
-              </div>
-              <span className="font-medium text-foreground text-base">Chế độ tối (Dark Mode)</span>
-            </div>
-            
-            <button 
-              onClick={handleToggleTheme}
-              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${isDarkMode ? 'bg-black justify-end' : 'bg-red-500 justify-start'}`}
-            >
-              <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
-            </button>
-          </div>
-        </section>
 
         {/* Notifications */}
         <section>
