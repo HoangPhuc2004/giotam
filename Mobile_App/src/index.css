@@ -449,6 +449,13 @@
   }
 }
 
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --border: #334155;
+  --ring: #64748b;
+}
+
 @layer utilities {
   .absolute {
     position: absolute;

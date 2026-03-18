@@ -28,8 +28,7 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
     const newDark = !isDarkMode;
     setIsDarkMode(newDark);
     if (newDark) {
-      // Force text to be black on white by not adding .dark, or just adding a dummy class
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
@@ -97,7 +96,7 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
             
             <button 
               onClick={handleToggleTheme}
-              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${isDarkMode ? 'bg-blue-500 justify-end' : 'bg-gray-200 justify-start'}`}
+              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${isDarkMode ? 'bg-black justify-end' : 'bg-red-500 justify-start'}`}
             >
               <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
             </button>
@@ -120,7 +119,7 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
             
             <button 
               onClick={handleToggleNotifications}
-              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${notificationsEnabled ? 'bg-green-500 justify-end' : 'bg-gray-200 justify-start'}`}
+              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${notificationsEnabled ? 'bg-black justify-end' : 'bg-red-500 justify-start'}`}
             >
               <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
             </button>
@@ -129,17 +128,17 @@ export function ConfigurationPage({ onBack, onLogout }: ConfigurationPageProps) 
 
         {/* Account Danger Zone */}
         <section className="pt-6">
-          <h2 className="text-sm font-semibold text-red-400 uppercase tracking-wider mb-3">Vùng nguy hiểm</h2>
+          <h2 className="text-sm font-semibold text-red-500 uppercase tracking-wider mb-3">Vùng nguy hiểm</h2>
           <button 
             onClick={() => setShowDeleteAlert(true)}
-            className="w-full bg-red-50/50 rounded-2xl p-4 border border-red-100 flex items-center gap-3 hover:bg-red-50 transition-colors"
+            className="w-full bg-white rounded-2xl p-4 border-2 border-red-500 flex items-center justify-between shadow-sm hover:bg-red-50 transition-colors group"
           >
-            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600">
-              <Trash2 className="w-5 h-5" />
-            </div>
             <div className="flex flex-col text-left">
               <span className="font-semibold text-red-600 text-base">Xóa tài khoản</span>
-              <span className="text-xs text-red-400">Hành động này không thể hoàn tác</span>
+              <span className="text-xs text-red-500">Hành động này không thể hoàn tác</span>
+            </div>
+            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 group-hover:bg-red-200 transition-colors">
+              <Trash2 className="w-5 h-5" />
             </div>
           </button>
         </section>
