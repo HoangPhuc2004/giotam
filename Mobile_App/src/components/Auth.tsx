@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { api } from '../api';
 import { Eye, EyeOff, X, AlertCircle, Loader2 } from 'lucide-react';
-import logoImage from 'figma:asset/c819fc914ecaa07ab2a41a79fa5f1bba1493983f.png';
 
 interface AuthProps {
   onLogin: (user?: any) => void;
@@ -10,8 +9,8 @@ interface AuthProps {
 // ─── Nội dung Điều khoản & Điều kiện ─────────────────────────────────────────
 function TermsContent() {
   return (
-    <div className="text-sm leading-relaxed text-foreground space-y-4">
-      <h2 className="text-base font-bold text-center uppercase text-destructive">
+    <div className="text-sm leading-relaxed space-y-4" style={{ color: '#222' }}>
+      <h2 className="text-base font-bold text-center uppercase" style={{ color: '#8B0000' }}>
         Điều khoản và điều kiện sử dụng nền tảng điều phối hiến máu "Giọt Ấm"
       </h2>
 
@@ -22,39 +21,32 @@ function TermsContent() {
       </section>
 
       <section>
-        <h3 className="font-bold text-destructive uppercase mb-1">Chương I. Quy định chung về bản chất dịch vụ</h3>
+        <h3 className="font-bold uppercase mb-1" style={{ color: '#8B0000' }}>Chương I. Quy định chung về bản chất dịch vụ</h3>
         <ol className="list-decimal pl-5 space-y-2">
-          <li><span className="font-bold">Bản chất hoạt động:</span> Giọt Ấm hoạt động hoàn toàn trên tôn chỉ nhân đạo, phi lợi nhuận. Giọt Ấm định vị là một công cụ công nghệ trung gian hỗ trợ cung cấp thông tin và kết nối vị trí địa lý; Giọt Ấm <span className="font-bold">không</span> phải là cơ sở khám chữa bệnh, trung tâm lưu trữ máu hay đơn vị cung cấp dịch vụ y tế.</li>
+          <li><span className="font-bold">Bản chất hoạt động:</span> Giọt Ấm hoạt động hoàn toàn trên tôn chỉ nhân đạo, phi lợi nhuận.</li>
           <li><span className="font-bold">Nghiêm cấm thương mại hóa:</span> Mọi hành vi lợi dụng Nền tảng để thỏa thuận, mua bán máu, tạng hoặc trục lợi tài chính dưới mọi hình thức đều bị nghiêm cấm tuyệt đối.</li>
         </ol>
       </section>
 
       <section>
-        <h3 className="font-bold text-destructive uppercase mb-1">Chương II. Thỏa thuận với Tình nguyện viên</h3>
-        <p className="font-bold mb-1">Điều 1. Điều kiện tham gia và Nghĩa vụ cung cấp thông tin</p>
+        <h3 className="font-bold uppercase mb-1" style={{ color: '#8B0000' }}>Chương II. Thỏa thuận với Tình nguyện viên</h3>
         <ul className="list-disc pl-5 space-y-1">
           <li>Tình nguyện viên phải là công dân từ đủ 18 tuổi trở lên, có đầy đủ năng lực hành vi dân sự.</li>
           <li>Tình nguyện viên cam kết cung cấp thông tin cá nhân và dữ liệu sinh trắc học y tế một cách trung thực và chính xác tuyệt đối.</li>
-          <li>Mọi hành vi cố tình khai báo sai lệch sẽ do Tình nguyện viên tự chịu trách nhiệm hoàn toàn trước pháp luật.</li>
-        </ul>
-        <p className="font-bold mt-3 mb-1">Điều 2. Miễn trừ trách nhiệm</p>
-        <ul className="list-disc pl-5 space-y-1">
           <li>Giọt Ấm không bảo đảm Tình nguyện viên sẽ đủ điều kiện hiến máu khi đến cơ sở y tế.</li>
-          <li>Nền tảng được miễn trừ mọi trách nhiệm pháp lý liên quan đến bất kỳ sự cố y khoa hoặc tổn hại sức khỏe nào xảy ra trong và sau quá trình hiến máu.</li>
         </ul>
       </section>
 
       <section>
-        <h3 className="font-bold text-destructive uppercase mb-1">Chương IV. Chính sách bảo mật và Quyền riêng tư</h3>
+        <h3 className="font-bold uppercase mb-1" style={{ color: '#8B0000' }}>Chương IV. Chính sách bảo mật và Quyền riêng tư</h3>
         <ul className="list-disc pl-5 space-y-1">
-          <li><span className="font-bold">Dữ liệu Vị trí:</span> Hệ thống chỉ thu thập dữ liệu định vị để phục vụ thuật toán đo lường khoảng cách. Dữ liệu được mã hóa và ẩn danh.</li>
-          <li>Thông tin định danh của Tình nguyện viên chỉ được chia sẻ khi Tình nguyện viên chủ động xác nhận tham gia ca hiến máu.</li>
+          <li><span className="font-bold">Dữ liệu Vị trí:</span> Hệ thống chỉ thu thập dữ liệu định vị để phục vụ thuật toán đo lường khoảng cách.</li>
           <li>Giọt Ấm cam kết không bán, trao đổi, hoặc chuyển giao bất kỳ dữ liệu cá nhân nào cho bên thứ ba vì mục đích thương mại.</li>
           <li><span className="font-bold">Quyền được lãng quên:</span> Người dùng có quyền gửi yêu cầu xóa vĩnh viễn toàn bộ dữ liệu cá nhân của mình khỏi hệ thống.</li>
         </ul>
       </section>
 
-      <p className="italic text-center text-xs text-muted-foreground mt-4">
+      <p className="italic text-center text-xs mt-4" style={{ color: '#666' }}>
         (Văn bản được cập nhật lần cuối vào ngày 28 tháng 03 năm 2026 và có hiệu lực kể từ thời điểm Người dùng nhấn nút <span className="font-bold">Tôi Đồng Ý</span> trên ứng dụng.)
       </p>
     </div>
@@ -140,38 +132,85 @@ export function Auth({ onLogin }: AuthProps) {
     }
   };
 
-  // ── Shared styles ─────────────────────────────────────────────────────────
-  const inputClass =
-    'w-full mt-1 px-3 py-2.5 bg-muted border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-destructive/40 focus:border-destructive transition-colors text-sm';
-  const labelClass = 'block text-sm font-medium text-foreground';
+  // ── Shared inline styles ──────────────────────────────────────────────────
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    marginTop: '6px',
+    padding: '10px 12px',
+    backgroundColor: '#F0EDE8',
+    border: '1px solid #D9D0C7',
+    borderRadius: '8px',
+    fontSize: '14px',
+    color: '#1a1a1a',
+    outline: 'none',
+    boxSizing: 'border-box',
+  };
+
+  const labelStyle: React.CSSProperties = {
+    display: 'block',
+    fontSize: '14px',
+    fontWeight: '500',
+    color: '#1a1a1a',
+  };
+
+  const btnPrimary: React.CSSProperties = {
+    width: '100%',
+    backgroundColor: '#8B0000',
+    color: '#fff',
+    fontWeight: '600',
+    padding: '12px',
+    borderRadius: '10px',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: '15px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+  };
 
   return (
+    /* ── Mobile-width outer shell ── */
     <div
-      style={{ backgroundColor: '#FBF2E1', fontFamily: 'Georgia, "Times New Roman", serif' }}
-      className="min-h-screen flex flex-col"
+      style={{
+        backgroundColor: '#FBF2E1',
+        fontFamily: 'Georgia, "Times New Roman", serif',
+        minHeight: '100vh',
+        width: '100%',
+        maxWidth: '430px',    /* phone width cap */
+        margin: '0 auto',     /* center on desktop */
+        position: 'relative',
+      }}
     >
-
-      {/* ── LOGIN FORM ───────────────────────────────────────────────────── */}
       {isLogin ? (
-        <div className="flex-1 flex flex-col items-center justify-center px-10 py-10">
+        /* ── LOGIN FORM ─────────────────────────────────────────────────── */
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '40px 20px' }}>
           {/* Title */}
-          <div className="text-center mb-8 w-full max-w-sm">
-            <h1 className="text-4xl font-bold uppercase tracking-wide mb-2" style={{ color: '#1a1a1a' }}>Đăng nhập</h1>
-            <p className="text-muted-foreground text-sm">Chào mừng trở lại với GIỌT ẤM</p>
+          <div style={{ textAlign: 'center', marginBottom: '28px', width: '100%' }}>
+            <h1 style={{ fontSize: '32px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: '#1a1a1a', margin: 0 }}>Đăng nhập</h1>
+            <p style={{ fontSize: '14px', color: '#888', marginTop: '6px' }}>Chào mừng trở lại với GIỌT ẤM</p>
           </div>
 
-          {/* Card */}
-          <div className="w-full max-w-sm bg-card rounded-2xl px-7 py-8 shadow-md border border-border">
-            <form onSubmit={handleLoginSubmit} className="space-y-6">
+          {/* White card */}
+          <div style={{
+            width: '100%',
+            backgroundColor: '#ffffff',
+            borderRadius: '18px',
+            padding: '28px 24px',
+            boxShadow: '0 2px 16px rgba(0,0,0,0.08)',
+            border: '1px solid #E8E0D5',
+          }}>
+            <form onSubmit={handleLoginSubmit}>
               {loginError && (
-                <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg flex items-center gap-2 text-sm">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
+                <div style={{ backgroundColor: '#fff0f0', border: '1px solid #f5c0c0', color: '#8B0000', padding: '10px 14px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', marginBottom: '20px' }}>
+                  <AlertCircle size={16} style={{ flexShrink: 0 }} />
                   <span>{loginError}</span>
                 </div>
               )}
 
-              <div>
-                <label className={labelClass}>Email</label>
+              {/* Email */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={labelStyle}>Email</label>
                 <input
                   type="email"
                   placeholder="example@gmail.com"
@@ -179,13 +218,14 @@ export function Auth({ onLogin }: AuthProps) {
                   onChange={(e) => { setLoginForm({ ...loginForm, email: e.target.value }); setLoginError(null); }}
                   required
                   disabled={isLoginLoading}
-                  className={inputClass}
+                  style={inputStyle}
                 />
               </div>
 
-              <div>
-                <label className={labelClass}>Mật khẩu</label>
-                <div className="relative">
+              {/* Mật khẩu */}
+              <div style={{ marginBottom: '28px' }}>
+                <label style={labelStyle}>Mật khẩu</label>
+                <div style={{ position: 'relative' }}>
                   <input
                     type={showLoginPassword ? 'text' : 'password'}
                     placeholder="••••••••"
@@ -193,29 +233,31 @@ export function Auth({ onLogin }: AuthProps) {
                     onChange={(e) => { setLoginForm({ ...loginForm, password: e.target.value }); setLoginError(null); }}
                     required
                     disabled={isLoginLoading}
-                    className={`${inputClass} pr-10`}
+                    style={{ ...inputStyle, paddingRight: '40px' }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowLoginPassword(!showLoginPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#888', padding: 0 }}
                   >
-                    {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showLoginPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={isLoginLoading}
-                className="w-full bg-destructive text-destructive-foreground font-semibold py-3 rounded-xl hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
-              >
-                {isLoginLoading ? (<><Loader2 className="w-4 h-4 animate-spin" />Đang xử lý...</>) : 'Đăng nhập'}
+              {/* Nút đăng nhập */}
+              <button type="submit" disabled={isLoginLoading} style={btnPrimary}>
+                {isLoginLoading ? (<><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />Đang xử lý...</>) : 'Đăng nhập'}
               </button>
 
-              <p className="text-center text-sm text-muted-foreground">
+              {/* Link đăng ký */}
+              <p style={{ textAlign: 'center', fontSize: '14px', color: '#888', marginTop: '18px', marginBottom: 0 }}>
                 Chưa có tài khoản?{' '}
-                <button type="button" onClick={() => { setIsLogin(false); setLoginError(null); }} className="text-destructive font-semibold hover:underline">
+                <button
+                  type="button"
+                  onClick={() => { setIsLogin(false); setLoginError(null); }}
+                  style={{ background: 'none', border: 'none', color: '#8B0000', fontWeight: '600', cursor: 'pointer', fontSize: '14px', padding: 0 }}
+                >
                   Đăng ký ngay
                 </button>
               </p>
@@ -223,141 +265,129 @@ export function Auth({ onLogin }: AuthProps) {
           </div>
         </div>
       ) : (
-
-        /* ── REGISTER FORM ─────────────────────────────────────────────── */
-        <div className="w-full max-w-sm mx-auto px-8 py-10">
+        /* ── REGISTER FORM ──────────────────────────────────────────────── */
+        <div style={{ padding: '40px 20px' }}>
           {/* Title */}
-          <div className="text-center mb-10">
-            <h1 className="text-4xl font-bold uppercase tracking-wide text-destructive mb-1">Đăng ký</h1>
-            <p className="text-sm text-muted-foreground">Đăng ký tình nguyện viên hiến máu</p>
-            <p className="text-xs text-muted-foreground mt-1">*Bệnh viện vui lòng liên hệ để được cấp tài khoản</p>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <h1 style={{ fontSize: '32px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: '#8B0000', margin: 0 }}>Đăng ký</h1>
+            <p style={{ fontSize: '14px', color: '#888', marginTop: '6px' }}>Đăng ký tình nguyện viên hiến máu</p>
+            <p style={{ fontSize: '12px', color: '#aaa', marginTop: '4px' }}>*Bệnh viện vui lòng liên hệ để được cấp tài khoản</p>
           </div>
 
-          {/* Form – no card */}
-          <form onSubmit={handleRegisterSubmit} className="space-y-7">
+          <form onSubmit={handleRegisterSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <label className={labelClass}>Họ và tên</label>
+              <label style={labelStyle}>Họ và tên</label>
               <input type="text" placeholder="Nguyễn Văn A" value={registerForm.fullName}
-                onChange={(e) => setRegisterForm({ ...registerForm, fullName: e.target.value })} required className={inputClass} />
+                onChange={(e) => setRegisterForm({ ...registerForm, fullName: e.target.value })} required style={inputStyle} />
             </div>
 
             <div>
-              <label className={labelClass}>Số điện thoại</label>
+              <label style={labelStyle}>Số điện thoại</label>
               <input type="tel" placeholder="09xxxxxxxx" value={registerForm.phone}
-                onChange={(e) => setRegisterForm({ ...registerForm, phone: e.target.value })} required className={inputClass} />
+                onChange={(e) => setRegisterForm({ ...registerForm, phone: e.target.value })} required style={inputStyle} />
             </div>
 
             <div>
-              <label className={labelClass}>Email</label>
+              <label style={labelStyle}>Email</label>
               <input type="email" placeholder="example@gmail.com" value={registerForm.email}
-                onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })} required className={inputClass} />
+                onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })} required style={inputStyle} />
             </div>
 
             <div>
-              <label className={labelClass}>Địa chỉ</label>
+              <label style={labelStyle}>Địa chỉ</label>
               <input type="text" placeholder="Số nhà, Đường, Phường, Quận, TP.HCM" value={registerForm.address}
-                onChange={(e) => setRegisterForm({ ...registerForm, address: e.target.value })} required className={inputClass} />
+                onChange={(e) => setRegisterForm({ ...registerForm, address: e.target.value })} required style={inputStyle} />
             </div>
 
             <div>
-              <label className={labelClass}>Mật khẩu</label>
-              <div className="relative">
+              <label style={labelStyle}>Mật khẩu</label>
+              <div style={{ position: 'relative' }}>
                 <input type={showRegPassword ? 'text' : 'password'} placeholder="••••••••" value={registerForm.password}
-                  onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })} required className={`${inputClass} pr-10`} />
+                  onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })} required style={{ ...inputStyle, paddingRight: '40px' }} />
                 <button type="button" onClick={() => setShowRegPassword(!showRegPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
-                  {showRegPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#888', padding: 0 }}>
+                  {showRegPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
             <div>
-              <label className={labelClass}>Xác nhận mật khẩu</label>
-              <div className="relative">
+              <label style={labelStyle}>Xác nhận mật khẩu</label>
+              <div style={{ position: 'relative' }}>
                 <input type={showRegConfirmPassword ? 'text' : 'password'} placeholder="••••••••" value={registerForm.confirmPassword}
-                  onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })} required className={`${inputClass} pr-10`} />
+                  onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })} required style={{ ...inputStyle, paddingRight: '40px' }} />
                 <button type="button" onClick={() => setShowRegConfirmPassword(!showRegConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
-                  {showRegConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#888', padding: 0 }}>
+                  {showRegConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
             <div>
-              <label className={labelClass}>Nhóm máu</label>
+              <label style={labelStyle}>Nhóm máu</label>
               <select value={registerForm.bloodType}
-                onChange={(e) => setRegisterForm({ ...registerForm, bloodType: e.target.value })} required className={inputClass}>
+                onChange={(e) => setRegisterForm({ ...registerForm, bloodType: e.target.value })} required style={inputStyle}>
                 <option value="" disabled>Chọn nhóm máu</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
+                {['O+','O-','A+','A-','B+','B-','AB+','AB-'].map(t => <option key={t} value={t}>{t}</option>)}
                 <option value="Khác">Khác / Chưa biết</option>
               </select>
             </div>
 
             <div>
-              <label className={labelClass}>Ngày hiến máu gần nhất (nếu có)</label>
+              <label style={labelStyle}>Ngày hiến máu gần nhất (nếu có)</label>
               <input type="date" value={registerForm.lastDonationDate}
                 onChange={(e) => setRegisterForm({ ...registerForm, lastDonationDate: e.target.value })}
-                max={new Date().toISOString().split('T')[0]} className={inputClass} />
-              <p className="text-xs text-muted-foreground mt-1">Để trống nếu chưa từng hiến máu</p>
+                max={new Date().toISOString().split('T')[0]} style={inputStyle} />
+              <p style={{ fontSize: '12px', color: '#aaa', marginTop: '4px' }}>Để trống nếu chưa từng hiến máu</p>
             </div>
 
             {/* Điều khoản */}
-            <div className="flex items-start gap-3">
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
               <input type="checkbox" id="agreeTerms" checked={registerForm.agreeToTerms}
                 onChange={(e) => setRegisterForm({ ...registerForm, agreeToTerms: e.target.checked })}
-                className="w-4 h-4 mt-0.5 flex-shrink-0 cursor-pointer accent-destructive" />
-              <label htmlFor="agreeTerms" className="text-sm text-muted-foreground cursor-pointer">
+                style={{ width: '16px', height: '16px', marginTop: '2px', flexShrink: 0, accentColor: '#8B0000', cursor: 'pointer' }} />
+              <label htmlFor="agreeTerms" style={{ fontSize: '14px', color: '#555', cursor: 'pointer' }}>
                 Tôi đồng ý với{' '}
-                <button type="button" onClick={() => setShowTermsModal(true)} className="text-destructive font-semibold hover:underline">
+                <button type="button" onClick={() => setShowTermsModal(true)}
+                  style={{ background: 'none', border: 'none', color: '#8B0000', fontWeight: '600', cursor: 'pointer', fontSize: '14px', padding: 0 }}>
                   điều khoản và điều kiện sử dụng
                 </button>
               </label>
             </div>
 
             {/* Submit */}
-            <div className="flex flex-col items-center gap-4 pb-6">
-              <button
-                type="submit"
-                disabled={isRegLoading}
-                className="w-full bg-destructive text-destructive-foreground font-semibold py-3 rounded-xl hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
-              >
-                {isRegLoading ? (<><Loader2 className="w-4 h-4 animate-spin" />Đang xử lý...</>) : 'Đăng ký'}
+            <button type="submit" disabled={isRegLoading} style={btnPrimary}>
+              {isRegLoading ? (<><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />Đang xử lý...</>) : 'Đăng ký'}
+            </button>
+
+            <p style={{ textAlign: 'center', fontSize: '14px', color: '#888', marginBottom: '24px' }}>
+              Đã có tài khoản?{' '}
+              <button type="button" onClick={() => setIsLogin(true)}
+                style={{ background: 'none', border: 'none', color: '#8B0000', fontWeight: '600', cursor: 'pointer', fontSize: '14px', padding: 0 }}>
+                Đăng nhập
               </button>
-              <p className="text-sm text-muted-foreground">
-                Đã có tài khoản?{' '}
-                <button type="button" onClick={() => setIsLogin(true)} className="text-destructive font-semibold hover:underline">
-                  Đăng nhập
-                </button>
-              </p>
-            </div>
+            </p>
           </form>
         </div>
       )}
 
-      {/* ── TERMS MODAL ───────────────────────────────────────────────────── */}
+      {/* ── TERMS MODAL ─────────────────────────────────────────────────── */}
       {showTermsModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50">
-          <div className="bg-card w-full max-w-md rounded-t-3xl max-h-[85vh] flex flex-col shadow-2xl">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-border flex-shrink-0">
-              <h2 className="text-base font-bold text-card-foreground">Điều khoản &amp; Điều kiện sử dụng</h2>
-              <button onClick={() => setShowTermsModal(false)} className="p-1.5 hover:bg-muted rounded-full transition-colors">
-                <X className="w-5 h-5 text-muted-foreground" />
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 50 }}>
+          <div style={{ backgroundColor: '#fff', width: '100%', maxWidth: '430px', borderRadius: '24px 24px 0 0', maxHeight: '85vh', display: 'flex', flexDirection: 'column', boxShadow: '0 -4px 24px rgba(0,0,0,0.15)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #eee', flexShrink: 0 }}>
+              <h2 style={{ fontSize: '15px', fontWeight: 'bold', margin: 0 }}>Điều khoản &amp; Điều kiện sử dụng</h2>
+              <button onClick={() => setShowTermsModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', borderRadius: '50%' }}>
+                <X size={20} color="#888" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto px-5 py-4">
+            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
               <TermsContent />
             </div>
-            <div className="px-5 py-4 border-t border-border flex-shrink-0">
+            <div style={{ padding: '16px 20px', borderTop: '1px solid #eee', flexShrink: 0 }}>
               <button
-                onClick={() => { setRegisterForm((prev) => ({ ...prev, agreeToTerms: true })); setShowTermsModal(false); }}
-                className="w-full bg-destructive text-destructive-foreground font-semibold py-3 rounded-xl hover:bg-destructive/90 transition-colors"
+                onClick={() => { setRegisterForm((prev: any) => ({ ...prev, agreeToTerms: true })); setShowTermsModal(false); }}
+                style={{ ...btnPrimary, borderRadius: '12px', padding: '14px' }}
               >
                 Tôi Đồng Ý
               </button>
