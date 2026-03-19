@@ -155,22 +155,22 @@ export function Auth({ onLogin }: AuthProps) {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-start overflow-y-auto"
       style={{ backgroundColor: '#FBF2E1', fontFamily: 'Georgia, "Times New Roman", serif' }}
+      className="min-h-screen flex flex-col"
     >
       {/* ── LOGIN FORM ───────────────────────────────────────────────────── */}
       {isLogin ? (
-        <div className="w-full max-w-md px-6 py-12 flex flex-col items-center">
+        <div className="flex-1 flex flex-col items-center justify-center px-6 py-10">
           {/* Logo + Title */}
-          <div className="text-center mb-8">
-            <img src={logoImage} alt="Logo Giọt Ấm" className="h-14 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold uppercase tracking-wide mb-1" style={{ color: '#1a1a1a' }}>Đăng nhập</h1>
-            <p className="text-sm text-muted-foreground">Chào mừng trở lại với GIỌT ẤM</p>
+          <div className="text-center mb-10 w-full max-w-md">
+            <img src={logoImage} alt="Logo Giọt Ấm" className="h-16 mx-auto mb-5" />
+            <h1 className="text-4xl font-bold uppercase tracking-wide mb-2" style={{ color: '#1a1a1a' }}>Đăng nhập</h1>
+            <p className="text-muted-foreground">Chào mừng trở lại với GIỌT ẤM</p>
           </div>
 
           {/* Card */}
-          <div className="w-full bg-card rounded-2xl p-7 shadow-md border border-border">
-            <form onSubmit={handleLoginSubmit} className="space-y-5">
+          <div className="w-full max-w-md bg-card rounded-2xl px-8 py-8 shadow-md border border-border">
+            <form onSubmit={handleLoginSubmit} className="space-y-6">
               {/* Error Banner */}
               {loginError && (
                 <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg flex items-center gap-2 text-sm">
