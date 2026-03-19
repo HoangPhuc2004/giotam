@@ -292,8 +292,8 @@ export default function DonorAccount() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-4 mb-6 p-4 bg-red-50 rounded-xl">
-              <div className="w-12 h-12 bg-[#930511] rounded-full flex items-center justify-center">
-                <Trophy className="w-6 h-6 text-yellow-400" />
+              <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                <Trophy className="w-6 h-6 text-gray-700" />
               </div>
               <div>
                 <p className="text-sm text-gray-600 font-medium">Điểm tích lũy</p>
