@@ -164,6 +164,60 @@ class DonationRecord(db.Model):
             'status': self.status
         }
 
+class BloodRequest(db.Model):
+    __tablename__ = 'blood_requests'
+    id = db.Column(db.Integer, primary_key=True)
+    hospital_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    blood_type = db.Column(db.String(5), nullable=False)
+    amount_ml = db.Column(db.Integer, nullable=False, default=350)
+    urgency = db.Column(db.String(20), nullable=False, default='Cần gấp')  # 'Cần gấp', 'Khẩn cấp', 'Thường'
+    address = db.Column(db.String(200), nullable=True)  # Địa chỉ bệnh viện
+    note = db.Column(db.Text, nullable=True)
+    status = db.Column(db.String(20), nullable=False, default='open')  # 'open', 'closed'
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    hospital = db.relationship('User', foreign_keys=[hospital_id])
+    registrations = db.relationship('DonationRegistration', backref='blood_request', lazy=True)
+
+    def to_dict(self):
+        hospital = self.hospital
+        return {
+            'id': self.id,
+            'hospital_id': self.hospital_id,
+            'hospital_name': hospital.name if hospital else 'Không rõ',
+            'hospital_address': self.address or (hospital.address if hospital else ''),
+            'blood_type': self.blood_type,
+            'amount_ml': self.amount_ml,
+            'urgency': self.urgency,
+            'note': self.note,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'registration_count': len(self.registrations)
+        }
+
+class DonationRegistration(db.Model):
+    __tablename__ = 'donation_registrations'
+    id = db.Column(db.Integer, primary_key=True)
+    blood_request_id = db.Column(db.Integer, db.ForeignKey('blood_requests.id'), nullable=False)
+    donor_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    time_slot = db.Column(db.String(20), nullable=False)  # Ví dụ: '08:00', '09:00'
+    status = db.Column(db.String(20), nullable=False, default='registered')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    donor = db.relationship('User', foreign_keys=[donor_id])
+
+    def to_dict(self):
+        donor = self.donor
+        return {
+            'id': self.id,
+            'blood_request_id': self.blood_request_id,
+            'donor_id': self.donor_id,
+            'donor_name': donor.name if donor else 'Không rõ',
+            'donor_phone': donor.phone if donor else '',
+            'donor_blood_type': donor.blood_type if donor else '',
+            'time_slot': self.time_slot,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
 
 # --- CÁC API ROUTE CƠ BẢN ---
 
@@ -673,6 +727,115 @@ def participate():
     </body>
     </html>
     """, 200
+
+# --- BLOOD REQUEST APIs ---
+
+@app.route('/blood-requests', methods=['GET'])
+def get_blood_requests():
+    """Lấy danh sách yêu cầu hiến máu đang mở. Tình nguyện viên xem ở trang Home."""
+    try:
+        requests_list = BloodRequest.query.filter_by(status='open').order_by(BloodRequest.created_at.desc()).all()
+        return jsonify({
+            'count': len(requests_list),
+            'blood_requests': [r.to_dict() for r in requests_list]
+        }), 200
+    except Exception as e:
+        print(f"Lỗi get_blood_requests: {e}")
+        return jsonify({'error': 'Lỗi lấy danh sách yêu cầu hiến máu'}), 500
+
+
+@app.route('/blood-requests', methods=['POST'])
+def create_blood_request():
+    """Bệnh viện tạo yêu cầu hiến máu mới."""
+    data = request.get_json()
+    required = ['hospital_id', 'blood_type', 'amount_ml']
+    if not all(f in data and data[f] for f in required):
+        return jsonify({'error': 'Thiếu thông tin bắt buộc: hospital_id, blood_type, amount_ml'}), 400
+
+    hospital = User.query.filter_by(id=data['hospital_id']).first()
+    if not hospital:
+        return jsonify({'error': 'Không tìm thấy bệnh viện'}), 404
+
+    try:
+        new_req = BloodRequest(
+            hospital_id=data['hospital_id'],
+            blood_type=data['blood_type'],
+            amount_ml=int(data['amount_ml']),
+            urgency=data.get('urgency', 'Cần gấp'),
+            address=data.get('address', hospital.address or ''),
+            note=data.get('note', ''),
+            status='open'
+        )
+        db.session.add(new_req)
+        db.session.commit()
+        return jsonify({'message': 'Tạo yêu cầu thành công', 'blood_request': new_req.to_dict()}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Lỗi create_blood_request: {e}")
+        return jsonify({'error': 'Lỗi tạo yêu cầu'}), 500
+
+
+@app.route('/blood-requests/<int:req_id>/register', methods=['POST'])
+def register_blood_donation(req_id):
+    """Tình nguyện viên đăng ký hiến máu cho một yêu cầu, kèm khung giờ."""
+    data = request.get_json()
+    donor_id = data.get('donor_id')
+    time_slot = data.get('time_slot')
+
+    if not donor_id or not time_slot:
+        return jsonify({'error': 'Thiếu donor_id hoặc time_slot'}), 400
+
+    blood_req = BloodRequest.query.get(req_id)
+    if not blood_req:
+        return jsonify({'error': 'Không tìm thấy yêu cầu hiến máu'}), 404
+    if blood_req.status != 'open':
+        return jsonify({'error': 'Yêu cầu này đã đóng'}), 400
+
+    donor = User.query.get(donor_id)
+    if not donor:
+        return jsonify({'error': 'Không tìm thấy người hiến'}), 404
+
+    # Kiểm tra đã đăng ký chưa
+    existing = DonationRegistration.query.filter_by(
+        blood_request_id=req_id, donor_id=donor_id
+    ).first()
+    if existing:
+        return jsonify({'error': 'Bạn đã đăng ký cho yêu cầu này rồi'}), 409
+
+    try:
+        reg = DonationRegistration(
+            blood_request_id=req_id,
+            donor_id=donor_id,
+            time_slot=time_slot,
+            status='registered'
+        )
+        db.session.add(reg)
+        # Tặng 10 điểm khi đăng ký
+        donor.reward_points = (donor.reward_points or 0) + 10
+        db.session.commit()
+        return jsonify({
+            'message': 'Đăng ký hiến máu thành công! Bạn được tặng 10 điểm.',
+            'registration': reg.to_dict()
+        }), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Lỗi register_blood_donation: {e}")
+        return jsonify({'error': 'Lỗi đăng ký'}), 500
+
+
+@app.route('/blood-requests/<int:req_id>/registrations', methods=['GET'])
+def get_registrations(req_id):
+    """Bệnh viện xem danh sách tình nguyện viên đã đăng ký cho yêu cầu."""
+    blood_req = BloodRequest.query.get(req_id)
+    if not blood_req:
+        return jsonify({'error': 'Không tìm thấy yêu cầu'}), 404
+    regs = DonationRegistration.query.filter_by(blood_request_id=req_id).order_by(DonationRegistration.time_slot).all()
+    return jsonify({
+        'blood_request': blood_req.to_dict(),
+        'count': len(regs),
+        'registrations': [r.to_dict() for r in regs]
+    }), 200
+
 
 # --- ADMIN API: DANH SÁCH PENDING & XÁC NHẬN ---
 @app.route('/admin/pending_donations', methods=['GET'])

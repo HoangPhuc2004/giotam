@@ -1,78 +1,72 @@
 import { ClipboardList, Calendar, Phone, Clock, ChevronRight, Trophy } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { api } from '../api';
+import { TimeSlotModal } from './TimeSlotModal';
 
 interface HomeProps {
   onNavigate: (page: string) => void;
 }
 
+interface BloodRequest {
+  id: number;
+  hospital_name: string;
+  hospital_address: string;
+  blood_type: string;
+  amount_ml: number;
+  urgency: string;
+  note?: string;
+  registration_count: number;
+}
+
 export function Home({ onNavigate }: HomeProps) {
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [bloodRequests, setBloodRequests] = useState<BloodRequest[]>([]);
+  const [requestsLoading, setRequestsLoading] = useState(true);
+  const [selectedRequest, setSelectedRequest] = useState<BloodRequest | null>(null);
+
+  // Lấy user từ localStorage để biết donor_id
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const donorId = user?.id;
+
+  const fetchBloodRequests = useCallback(async () => {
+    setRequestsLoading(true);
+    try {
+      const res = await api.get('/blood-requests');
+      if (res.data?.blood_requests) {
+        setBloodRequests(res.data.blood_requests);
+      }
+    } catch (err) {
+      console.error('Failed to fetch blood requests', err);
+    } finally {
+      setRequestsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
         const res = await api.get('/leaderboard');
-        if (res.data && res.data.leaderboard) {
-          setLeaderboard(res.data.leaderboard);
-        }
+        if (res.data?.leaderboard) setLeaderboard(res.data.leaderboard);
       } catch (err) {
-        console.error("Failed to fetch leaderboard", err);
+        console.error('Failed to fetch leaderboard', err);
       }
     };
     fetchLeaderboard();
-  }, []);
+    fetchBloodRequests();
+  }, [fetchBloodRequests]);
 
   const mainActions = [
-    {
-      id: 'health-declaration',
-      title: 'Kê khai\nsức khỏe',
-      icon: ClipboardList,
-    },
-    {
-      id: 'register-donation',
-      title: 'Đăng ký\nhiến máu',
-      icon: Calendar,
-    },
-    {
-      id: 'donation-history',
-      title: 'Lịch sử\nhiến máu',
-      icon: Clock,
-    },
-    {
-      id: 'hotline',
-      title: 'Hotline\nhỗ trợ',
-      icon: Phone,
-    },
+    { id: 'health-declaration', title: 'Kê khai\nsức khỏe', icon: ClipboardList },
+    { id: 'register-donation', title: 'Đăng ký\nhiến máu', icon: Calendar },
+    { id: 'donation-history', title: 'Lịch sử\nhiến máu', icon: Clock },
+    { id: 'hotline', title: 'Hotline\nhỗ trợ', icon: Phone },
   ];
 
-  const donationRequests = [
-    {
-      id: 1,
-      bloodType: 'O+',
-      hospital: 'Bệnh viện Chợ Rẫy',
-      location: 'Quận 5, TP.HCM',
-      urgency: 'Cần gấp',
-      amount: '500ml',
-    },
-    {
-      id: 2,
-      bloodType: 'A+',
-      hospital: 'Bệnh viện Bình Dân',
-      location: 'Quận 3, TP.HCM',
-      urgency: 'Khẩn cấp',
-      amount: '350ml',
-    },
-  ];
-
-  const benefits = [
-    {
-      id: 1,
-      title: 'Tăng cường sức khỏe tim mạch',
-      description: 'Hiến máu giúp giảm nguy cơ mắc bệnh tim mạch và đột quỵ',
-    },
-  ];
+  const urgencyBadgeColor = (urgency: string) => {
+    if (urgency === 'Khẩn cấp') return { bg: '#fee2e2', color: '#991b1b' };
+    if (urgency === 'Cần gấp') return { bg: '#ffedd5', color: '#c2410c' };
+    return { bg: '#dcfce7', color: '#15803d' };
+  };
 
   return (
     <div className="min-h-full bg-background pb-24">
@@ -111,36 +105,79 @@ export function Home({ onNavigate }: HomeProps) {
 
         {/* Scrollable cards */}
         <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4">
-          {donationRequests.map((request) => (
-            <div
-              key={request.id}
-              className="min-w-[340px] bg-card rounded-3xl p-6 shadow-lg"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <div className="text-4xl font-bold text-destructive mb-1">
-                    {request.bloodType}
+          {requestsLoading ? (
+            /* Skeleton loading */
+            [1, 2].map((i) => (
+              <div key={i} className="min-w-[340px] bg-card rounded-3xl p-6 shadow-lg animate-pulse">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <div className="w-16 h-10 bg-gray-200 rounded mb-2" />
+                    <div className="w-20 h-5 bg-gray-200 rounded-full" />
                   </div>
-                  <span className="inline-block px-3 py-1 bg-red-100 text-destructive text-xs font-bold rounded-full">
-                    {request.urgency}
-                  </span>
+                  <div className="w-16 h-10 bg-gray-200 rounded" />
                 </div>
-                <div className="text-right">
-                  <div className="text-sm text-muted-foreground">Số lượng</div>
-                  <div className="text-lg font-bold text-foreground">{request.amount}</div>
-                </div>
+                <div className="w-40 h-4 bg-gray-200 rounded mb-2" />
+                <div className="w-28 h-3 bg-gray-200 rounded mb-4" />
+                <div className="w-full h-11 bg-gray-200 rounded-xl" />
               </div>
-              <div className="space-y-2">
-                <div>
-                  <div className="text-sm font-medium text-foreground">{request.hospital}</div>
-                  <div className="text-xs text-muted-foreground">{request.location}</div>
-                </div>
-                <button className="w-full bg-destructive text-destructive-foreground py-3 rounded-xl font-bold hover:bg-destructive/90 transition-colors mt-4">
-                  Đăng ký hiến máu
-                </button>
-              </div>
+            ))
+          ) : bloodRequests.length === 0 ? (
+            <div className="min-w-[340px] bg-card rounded-3xl p-6 shadow-lg flex flex-col items-center justify-center text-center gap-2 py-10">
+              <span style={{ fontSize: 36 }}>🩸</span>
+              <div className="font-semibold text-foreground">Chưa có yêu cầu hiến máu</div>
+              <div className="text-sm text-muted-foreground">Hiện tại chưa có bệnh viện nào gửi yêu cầu.</div>
             </div>
-          ))}
+          ) : (
+            bloodRequests.map((req) => {
+              const badge = urgencyBadgeColor(req.urgency);
+              return (
+                <div
+                  key={req.id}
+                  className="min-w-[340px] bg-card rounded-3xl p-6 shadow-lg"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <div className="text-4xl font-bold text-destructive mb-1">
+                        {req.blood_type}
+                      </div>
+                      <span style={{
+                        display: 'inline-block',
+                        padding: '3px 10px',
+                        backgroundColor: badge.bg,
+                        color: badge.color,
+                        fontSize: 12,
+                        fontWeight: 700,
+                        borderRadius: 99,
+                      }}>
+                        {req.urgency}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm text-muted-foreground">Số lượng</div>
+                      <div className="text-lg font-bold text-foreground">{req.amount_ml}ml</div>
+                      {req.registration_count > 0 && (
+                        <div className="text-xs text-green-600 font-medium mt-1">
+                          {req.registration_count} người đăng ký
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div>
+                      <div className="text-sm font-medium text-foreground">{req.hospital_name}</div>
+                      <div className="text-xs text-muted-foreground">{req.hospital_address}</div>
+                    </div>
+                    <button
+                      onClick={() => setSelectedRequest(req)}
+                      className="w-full bg-destructive text-destructive-foreground py-3 rounded-xl font-bold hover:bg-destructive/90 transition-colors mt-4"
+                    >
+                      Đăng ký hiến máu
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 
@@ -151,7 +188,7 @@ export function Home({ onNavigate }: HomeProps) {
             <Trophy className="w-6 h-6 text-yellow-500 fill-yellow-500" />
             Bảng vinh danh
           </h2>
-          <button 
+          <button
             onClick={() => onNavigate('leaderboard')}
             className="text-destructive text-sm font-medium flex items-center gap-1"
           >
@@ -159,12 +196,11 @@ export function Home({ onNavigate }: HomeProps) {
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
-        
+
         <div className="bg-card rounded-3xl p-5 shadow-lg space-y-5">
           {leaderboard.length > 0 ? leaderboard.map((donor, index) => {
             let rankColor = "bg-muted text-muted-foreground";
             let rankBg = "bg-destructive/5 rounded-2xl";
-            // Premium medal styling for top 3
             if (index === 0) {
               rankColor = "bg-yellow-100 text-yellow-600 border border-yellow-300 shadow-sm";
               rankBg = "bg-gradient-to-r from-yellow-500/15 to-transparent border-l-4 border-yellow-500 rounded-xl";
@@ -175,7 +211,7 @@ export function Home({ onNavigate }: HomeProps) {
               rankColor = "bg-orange-100 text-[#CD7F32] border border-orange-300 shadow-sm";
               rankBg = "bg-gradient-to-r from-orange-500/15 to-transparent border-l-4 border-[#CD7F32] rounded-xl";
             }
-            
+
             return (
               <div key={donor.id || index} className={`flex items-center justify-between p-4 ${rankBg}`}>
                 <div className="flex items-center gap-4 flex-1 min-w-0 pr-2">
@@ -204,7 +240,7 @@ export function Home({ onNavigate }: HomeProps) {
       {/* Benefits Section */}
       <div className="px-4 mt-6">
         <h2 className="text-xl font-bold text-destructive mb-4">Lợi ích hiến máu</h2>
-        
+
         <div className="bg-card rounded-3xl p-6 shadow-lg">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -223,6 +259,20 @@ export function Home({ onNavigate }: HomeProps) {
           </div>
         </div>
       </div>
+
+      {/* TimeSlot Modal */}
+      {selectedRequest && donorId && (
+        <TimeSlotModal
+          request={selectedRequest}
+          donorId={donorId}
+          onClose={() => setSelectedRequest(null)}
+          onSuccess={() => {
+            setSelectedRequest(null);
+            fetchBloodRequests(); // Refresh để cập nhật registration_count
+          }}
+        />
+      )}
     </div>
   );
 }
+
