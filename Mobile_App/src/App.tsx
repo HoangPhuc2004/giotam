@@ -31,6 +31,27 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+    // Check health declaration
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        const stored = localStorage.getItem(`health_declaration_${user.id}`);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          const daysDiff = (new Date().getTime() - new Date(parsed.date).getTime()) / (1000 * 3600 * 24);
+          if (daysDiff <= 90 && user.donations_count === parsed.donationsCount) {
+             setHasHealthDeclaration(true);
+          } else {
+             localStorage.removeItem(`health_declaration_${user.id}`);
+             setHasHealthDeclaration(false);
+          }
+        }
+      } catch (e) {}
+    }
+  }, [isLoggedIn]);
+
   // Show Auth screen if not logged in
   if (!isLoggedIn) {
     return <Auth onLogin={(user) => {

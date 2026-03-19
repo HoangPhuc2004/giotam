@@ -14,12 +14,28 @@ interface HealthQuestion {
 
 export default function DonateBloodPage() {
   const navigate = useNavigate();
-  // Check auth
+  // Check auth & declaration cache
   useEffect(() => {
     const userStr = localStorage.getItem('user');
     if (!userStr) {
       toast.error('Bạn cần đăng nhập để đăng ký hiến máu');
       navigate('/login');
+    } else {
+      try {
+        const user = JSON.parse(userStr);
+        const stored = localStorage.getItem(`health_declaration_${user.id}`);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          const daysDiff = (new Date().getTime() - new Date(parsed.date).getTime()) / (1000 * 3600 * 24);
+          if (daysDiff <= 90 && user.donations_count === parsed.donationsCount) {
+             setDeclarationCompleted(true);
+          } else {
+             localStorage.removeItem(`health_declaration_${user.id}`);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   }, [navigate]);
 
@@ -99,6 +115,18 @@ export default function DonateBloodPage() {
 
   const handleConfirmDeclaration = () => {
     if (allQuestionsAnswered() && agreedToTerms) {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          localStorage.setItem(`health_declaration_${user.id}`, JSON.stringify({
+            date: new Date().toISOString(),
+            donationsCount: user.donations_count || 0
+          }));
+        } catch (e) {
+          console.error(e);
+        }
+      }
       setDeclarationCompleted(true);
       window.scrollTo(0, 0);
     }

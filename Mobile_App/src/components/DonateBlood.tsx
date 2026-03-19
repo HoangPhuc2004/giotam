@@ -108,6 +108,18 @@ export function DonateBlood({ onComplete, onBack }: DonateBloodProps) {
 
   const handleConfirmDeclaration = () => {
     if (canConfirmDeclaration()) {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          localStorage.setItem(`health_declaration_${user.id}`, JSON.stringify({
+            date: new Date().toISOString(),
+            donationsCount: user.donations_count || 0
+          }));
+        } catch (e) {
+          console.error(e);
+        }
+      }
       setDeclarationCompleted(true);
       if (onComplete) {
         onComplete();
