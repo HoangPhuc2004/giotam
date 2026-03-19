@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { api } from '../api';
-import { useState } from 'react';
 import { Eye, EyeOff, X, AlertCircle, Loader2 } from 'lucide-react';
 import logoImage from 'figma:asset/c819fc914ecaa07ab2a41a79fa5f1bba1493983f.png';
 
@@ -10,8 +10,8 @@ interface AuthProps {
 // ─── Nội dung Điều khoản & Điều kiện ─────────────────────────────────────────
 function TermsContent() {
   return (
-    <div className="text-sm leading-relaxed text-gray-700 space-y-4">
-      <h2 className="text-base font-bold text-center uppercase text-[#930511]">
+    <div className="text-sm leading-relaxed text-foreground space-y-4">
+      <h2 className="text-base font-bold text-center uppercase text-destructive">
         Điều khoản và điều kiện sử dụng nền tảng điều phối hiến máu "Giọt Ấm"
       </h2>
 
@@ -22,7 +22,7 @@ function TermsContent() {
       </section>
 
       <section>
-        <h3 className="font-bold text-[#930511] uppercase mb-1">Chương I. Quy định chung về bản chất dịch vụ</h3>
+        <h3 className="font-bold text-destructive uppercase mb-1">Chương I. Quy định chung về bản chất dịch vụ</h3>
         <ol className="list-decimal pl-5 space-y-2">
           <li><span className="font-bold">Bản chất hoạt động:</span> Giọt Ấm hoạt động hoàn toàn trên tôn chỉ nhân đạo, phi lợi nhuận. Giọt Ấm định vị là một công cụ công nghệ trung gian hỗ trợ cung cấp thông tin và kết nối vị trí địa lý; Giọt Ấm <span className="font-bold">không</span> phải là cơ sở khám chữa bệnh, trung tâm lưu trữ máu hay đơn vị cung cấp dịch vụ y tế.</li>
           <li><span className="font-bold">Nghiêm cấm thương mại hóa:</span> Mọi hành vi lợi dụng Nền tảng để thỏa thuận, mua bán máu, tạng hoặc trục lợi tài chính dưới mọi hình thức đều bị nghiêm cấm tuyệt đối.</li>
@@ -30,7 +30,7 @@ function TermsContent() {
       </section>
 
       <section>
-        <h3 className="font-bold text-[#930511] uppercase mb-1">Chương II. Thỏa thuận với Tình nguyện viên</h3>
+        <h3 className="font-bold text-destructive uppercase mb-1">Chương II. Thỏa thuận với Tình nguyện viên</h3>
         <p className="font-bold mb-1">Điều 1. Điều kiện tham gia và Nghĩa vụ cung cấp thông tin</p>
         <ul className="list-disc pl-5 space-y-1">
           <li>Tình nguyện viên phải là công dân từ đủ 18 tuổi trở lên, có đầy đủ năng lực hành vi dân sự.</li>
@@ -45,11 +45,11 @@ function TermsContent() {
       </section>
 
       <section>
-        <h3 className="font-bold text-[#930511] uppercase mb-1">Chương IV. Chính sách bảo mật và Quyền riêng tư</h3>
+        <h3 className="font-bold text-destructive uppercase mb-1">Chương IV. Chính sách bảo mật và Quyền riêng tư</h3>
         <p className="font-bold mb-1">Điều 5. Thu thập và Xử lý Dữ liệu</p>
         <ul className="list-disc pl-5 space-y-1">
           <li><span className="font-bold">Dữ liệu Vị trí (Geo-location):</span> Hệ thống chỉ thu thập dữ liệu định vị để phục vụ duy nhất cho thuật toán đo lường khoảng cách. Dữ liệu được mã hóa và ẩn danh.</li>
-          <li><span className="font-bold">Quy tắc chia sẻ thông tin:</span> Thông tin định danh của Tình nguyện viên chỉ được chia sẻ cho Cơ sở y tế khi và chỉ khi Tình nguyện viên chủ động xác nhận tham gia ca hiến máu.</li>
+          <li><span className="font-bold">Quy tắc chia sẻ thông tin:</span> Thông tin định danh của Tình nguyện viên chỉ được chia sẻ khi và chỉ khi Tình nguyện viên chủ động xác nhận tham gia ca hiến máu.</li>
         </ul>
         <p className="font-bold mt-3 mb-1">Điều 6. Cam kết không thương mại hóa dữ liệu</p>
         <ul className="list-disc pl-5 space-y-1">
@@ -62,7 +62,7 @@ function TermsContent() {
         </ul>
       </section>
 
-      <p className="italic text-center text-xs text-gray-500 mt-4">
+      <p className="italic text-center text-xs text-muted-foreground mt-4">
         (Văn bản được cập nhật lần cuối vào ngày 28 tháng 03 năm 2026 và có hiệu lực kể từ thời điểm Người dùng nhấn nút <span className="font-bold">Tôi Đồng Ý</span> trên ứng dụng.)
       </p>
     </div>
@@ -150,13 +150,13 @@ export function Auth({ onLogin }: AuthProps) {
 
   // ── Shared input style ────────────────────────────────────────────────────
   const inputClass =
-    'w-full mt-1 px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#930511]/40 focus:border-[#930511] transition-colors text-sm';
-  const labelClass = 'block text-sm font-medium text-gray-700';
+    'w-full mt-1 px-3 py-2 bg-muted border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-destructive/40 focus:border-destructive transition-colors text-sm';
+  const labelClass = 'block text-sm font-medium text-foreground';
 
   return (
     <div
-      className="min-h-screen bg-[#FBF2E1] flex flex-col items-center justify-start overflow-y-auto"
-      style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+      className="min-h-screen flex flex-col items-center justify-start overflow-y-auto"
+      style={{ backgroundColor: '#FBF2E1', fontFamily: 'Georgia, "Times New Roman", serif' }}
     >
       {/* ── LOGIN FORM ───────────────────────────────────────────────────── */}
       {isLogin ? (
@@ -164,16 +164,16 @@ export function Auth({ onLogin }: AuthProps) {
           {/* Logo + Title */}
           <div className="text-center mb-8">
             <img src={logoImage} alt="Logo Giọt Ấm" className="h-14 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold uppercase tracking-wide text-gray-900 mb-1">Đăng nhập</h1>
-            <p className="text-gray-500 text-sm">Chào mừng trở lại với GIỌT ẤM</p>
+            <h1 className="text-3xl font-bold uppercase tracking-wide mb-1" style={{ color: '#1a1a1a' }}>Đăng nhập</h1>
+            <p className="text-sm text-muted-foreground">Chào mừng trở lại với GIỌT ẤM</p>
           </div>
 
           {/* Card */}
-          <div className="w-full bg-white rounded-2xl p-7 shadow-md">
+          <div className="w-full bg-card rounded-2xl p-7 shadow-md border border-border">
             <form onSubmit={handleLoginSubmit} className="space-y-5">
               {/* Error Banner */}
               {loginError && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg flex items-center gap-2 text-sm">
+                <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg flex items-center gap-2 text-sm">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{loginError}</span>
                 </div>
@@ -215,7 +215,7 @@ export function Auth({ onLogin }: AuthProps) {
                   <button
                     type="button"
                     onClick={() => setShowLoginPassword(!showLoginPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -226,7 +226,7 @@ export function Auth({ onLogin }: AuthProps) {
               <button
                 type="submit"
                 disabled={isLoginLoading}
-                className="w-full bg-[#930511] text-white font-semibold py-2.5 rounded-lg hover:bg-[#7a0410] transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                className="w-full bg-destructive text-destructive-foreground font-semibold py-2.5 rounded-lg hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {isLoginLoading ? (
                   <>
@@ -240,12 +240,12 @@ export function Auth({ onLogin }: AuthProps) {
             </form>
 
             {/* Link to Register */}
-            <div className="mt-5 text-center text-sm text-gray-600">
+            <div className="mt-5 text-center text-sm text-muted-foreground">
               Chưa có tài khoản?{' '}
               <button
                 type="button"
                 onClick={() => { setIsLogin(false); setLoginError(null); }}
-                className="text-[#930511] font-semibold hover:underline"
+                className="text-destructive font-semibold hover:underline"
               >
                 Đăng ký ngay
               </button>
@@ -258,13 +258,13 @@ export function Auth({ onLogin }: AuthProps) {
           {/* Logo + Title */}
           <div className="text-center mb-8">
             <img src={logoImage} alt="Logo Giọt Ấm" className="h-14 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold uppercase tracking-wide text-[#930511] mb-1">Đăng ký</h1>
-            <p className="text-gray-500 text-sm">Đăng ký tình nguyện viên hiến máu</p>
-            <p className="text-xs text-gray-400 mt-1">*Bệnh viện vui lòng liên hệ để được cấp tài khoản</p>
+            <h1 className="text-3xl font-bold uppercase tracking-wide text-destructive mb-1">Đăng ký</h1>
+            <p className="text-sm text-muted-foreground">Đăng ký tình nguyện viên hiến máu</p>
+            <p className="text-xs text-muted-foreground mt-1">*Bệnh viện vui lòng liên hệ để được cấp tài khoản</p>
           </div>
 
           {/* Card */}
-          <div className="w-full bg-white rounded-2xl p-7 shadow-md">
+          <div className="w-full bg-card rounded-2xl p-7 shadow-md border border-border">
             <form onSubmit={handleRegisterSubmit} className="space-y-5">
 
               {/* Họ và tên */}
@@ -334,7 +334,7 @@ export function Auth({ onLogin }: AuthProps) {
                   <button
                     type="button"
                     onClick={() => setShowRegPassword(!showRegPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {showRegPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -356,7 +356,7 @@ export function Auth({ onLogin }: AuthProps) {
                   <button
                     type="button"
                     onClick={() => setShowRegConfirmPassword(!showRegConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {showRegConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -395,7 +395,7 @@ export function Auth({ onLogin }: AuthProps) {
                   max={new Date().toISOString().split('T')[0]}
                   className={inputClass}
                 />
-                <p className="text-xs text-gray-400 mt-1">Để trống nếu chưa từng hiến máu</p>
+                <p className="text-xs text-muted-foreground mt-1">Để trống nếu chưa từng hiến máu</p>
               </div>
 
               {/* Điều khoản – Checkbox */}
@@ -405,14 +405,14 @@ export function Auth({ onLogin }: AuthProps) {
                   id="agreeTerms"
                   checked={registerForm.agreeToTerms}
                   onChange={(e) => setRegisterForm({ ...registerForm, agreeToTerms: e.target.checked })}
-                  className="w-4 h-4 mt-0.5 accent-[#930511] flex-shrink-0 cursor-pointer"
+                  className="w-4 h-4 mt-0.5 flex-shrink-0 cursor-pointer accent-destructive"
                 />
-                <label htmlFor="agreeTerms" className="text-sm text-gray-600 cursor-pointer">
+                <label htmlFor="agreeTerms" className="text-sm text-muted-foreground cursor-pointer">
                   Tôi đồng ý với{' '}
                   <button
                     type="button"
                     onClick={() => setShowTermsModal(true)}
-                    className="text-[#930511] font-semibold hover:underline"
+                    className="text-destructive font-semibold hover:underline"
                   >
                     điều khoản và điều kiện sử dụng
                   </button>
@@ -423,7 +423,7 @@ export function Auth({ onLogin }: AuthProps) {
               <button
                 type="submit"
                 disabled={isRegLoading}
-                className="w-full bg-[#930511] text-white font-semibold py-2.5 rounded-lg hover:bg-[#7a0410] transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                className="w-full bg-destructive text-destructive-foreground font-semibold py-2.5 rounded-lg hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {isRegLoading ? (
                   <>
@@ -437,12 +437,12 @@ export function Auth({ onLogin }: AuthProps) {
             </form>
 
             {/* Link to Login */}
-            <div className="mt-5 text-center text-sm text-gray-600">
+            <div className="mt-5 text-center text-sm text-muted-foreground">
               Đã có tài khoản?{' '}
               <button
                 type="button"
                 onClick={() => setIsLogin(true)}
-                className="text-[#930511] font-semibold hover:underline"
+                className="text-destructive font-semibold hover:underline"
               >
                 Đăng nhập
               </button>
@@ -454,15 +454,15 @@ export function Auth({ onLogin }: AuthProps) {
       {/* ── TERMS MODAL ───────────────────────────────────────────────────── */}
       {showTermsModal && (
         <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50">
-          <div className="bg-white w-full max-w-md rounded-t-3xl max-h-[85vh] flex flex-col shadow-2xl">
+          <div className="bg-card w-full max-w-md rounded-t-3xl max-h-[85vh] flex flex-col shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 flex-shrink-0">
-              <h2 className="text-base font-bold text-gray-900">Điều khoản & Điều kiện sử dụng</h2>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border flex-shrink-0">
+              <h2 className="text-base font-bold text-card-foreground">Điều khoản &amp; Điều kiện sử dụng</h2>
               <button
                 onClick={() => setShowTermsModal(false)}
-                className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-1.5 hover:bg-muted rounded-full transition-colors"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-muted-foreground" />
               </button>
             </div>
 
@@ -472,13 +472,13 @@ export function Auth({ onLogin }: AuthProps) {
             </div>
 
             {/* Footer */}
-            <div className="px-5 py-4 border-t border-gray-200 flex-shrink-0">
+            <div className="px-5 py-4 border-t border-border flex-shrink-0">
               <button
                 onClick={() => {
                   setRegisterForm((prev) => ({ ...prev, agreeToTerms: true }));
                   setShowTermsModal(false);
                 }}
-                className="w-full bg-[#930511] text-white font-semibold py-3 rounded-xl hover:bg-[#7a0410] transition-colors"
+                className="w-full bg-destructive text-destructive-foreground font-semibold py-3 rounded-xl hover:bg-destructive/90 transition-colors"
               >
                 Tôi Đồng Ý
               </button>
