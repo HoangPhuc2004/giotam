@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Hospital, TrendingUp, LogOut, CheckCircle } from 'lucide-react';
+import { Users, Hospital, TrendingUp, LogOut, CheckCircle, Search, Droplet, Phone, MapPin, Send } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { api } from '../api';
 
@@ -26,6 +26,13 @@ export function AdminDashboard({ onLogout, userRole = 'admin' }: AdminDashboardP
   const [toastMessage, setToastMessage] = useState('');
 
   const [isLoadingPending, setIsLoadingPending] = useState(false);
+
+  // Search TNV States
+  const [filters, setFilters] = useState({ bloodType: 'O+', radius: '10' });
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [selectedDonors, setSelectedDonors] = useState<number[]>([]);
 
   const fetchPendingDonations = async () => {
     setIsLoadingPending(true);
@@ -98,8 +105,100 @@ export function AdminDashboard({ onLogout, userRole = 'admin' }: AdminDashboardP
     }
   };
 
+  // Logic Tìm Kiếm TNV
+  const handleSearchDonors = async () => {
+    setIsSearching(true);
+    setSearchError(null);
+    setSearchResults([]);
+    setSelectedDonors([]);
 
-  return (
+    try {
+      const userStr = localStorage.getItem('user');
+      const user = userStr ? JSON.parse(userStr) : null;
+      const hospitalId = user?.id || 1;
+
+      const searchPayload = {
+        hospital_id: hospitalId,
+        blood_type: filters.bloodType,
+        radius_km: parseInt(filters.radius, 10),
+      };
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/create_alert`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(searchPayload),
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || `Lỗi ${response.status}`);
+
+      setSearchResults(result.top_50_users || []);
+      if (!result.top_50_users || result.top_50_users.length === 0) {
+        setToastMessage("Không tìm thấy người phù hợp.");
+        setTimeout(() => setToastMessage(''), 3000);
+      } else {
+        setToastMessage(`Tìm thấy ${result.top_50_users.length} TNV.`);
+        setTimeout(() => setToastMessage(''), 3000);
+      }
+    } catch (error: any) {
+      setSearchError(`Lỗi tìm kiếm: ${error.message}`);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSelectDonor = (donorId: number) => {
+    setSelectedDonors(prev => {
+      if (prev.includes(donorId)) return prev.filter(id => id !== donorId);
+      return [...prev, donorId];
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectedDonors.length === searchResults.length) {
+      setSelectedDonors([]);
+    } else {
+      setSelectedDonors(searchResults.map(result => result.user.id));
+    }
+  };
+
+  const handleBulkContact = async () => {
+    if (selectedDonors.length === 0) {
+      setToastMessage("Vui lòng chọn ít nhất một người");
+      setTimeout(() => setToastMessage(''), 3000);
+      return;
+    }
+
+    setIsSearching(true);
+    const userStr = localStorage.getItem('user');
+    const user = userStr ? JSON.parse(userStr) : null;
+    const hospitalName = user?.name || "Bệnh viện";
+    const hospitalAddress = user?.address || "địa chỉ hiển thị trên trang chủ";
+    const bloodTypeNeeded = filters.bloodType;
+
+    const messageBody = `[GIOT AM] KHẨN CẤP! Bệnh viện ${hospitalName} đang cần gấp nhóm máu ${bloodTypeNeeded}. Xin vui lòng hiến máu tại: ${hospitalAddress}. Trân trọng cảm ơn!`;
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/notify_donors`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          donor_ids: selectedDonors,
+          message: messageBody
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Lỗi không xác định');
+
+      setToastMessage(result.message || 'Đã gửi yêu cầu.');
+      setTimeout(() => setToastMessage(''), 3000);
+      setSelectedDonors([]);
+    } catch (error: any) {
+      setSearchError(`Gửi thông báo thất bại: ${error.message}`);
+    } finally {
+      setIsSearching(false);
+    }
+  };  return (
     <div className="min-h-full bg-background pb-24 relative">
       {/* Toast Notification */}
       {toastMessage && (
@@ -189,6 +288,87 @@ export function AdminDashboard({ onLogout, userRole = 'admin' }: AdminDashboardP
             </ResponsiveContainer>   {/* <--- THÊM DÒNG NÀY VÀO ĐÂY */}
           </div>
         </div>
+
+        {/* Section Bệnh viện Tìm kiếm TNV */}
+        {userRole === 'hospital' && (
+          <div className="bg-[#FBF2E1] rounded-3xl p-6 shadow-lg border border-[#e5d5b7] mt-6">
+            <h2 className="text-lg font-bold text-foreground mb-1">Tìm người hiến máu</h2>
+            <p className="text-xs text-muted-foreground mb-4">Gửi thông báo khẩn cấp tới những tình nguyện viên phù hợp xung quanh theo bán kính.</p>
+            
+            <div className="flex gap-2 mb-4">
+              <div className="flex-1">
+                <select 
+                  className="w-full h-10 bg-white border border-border rounded-lg px-3 text-sm focus:outline-none focus:ring-1 focus:ring-destructive"
+                  value={filters.bloodType}
+                  onChange={(e) => setFilters(prev => ({...prev, bloodType: e.target.value}))}
+                >
+                  <option value="O+">Nhóm O+</option>
+                  <option value="O-">Nhóm O-</option>
+                  <option value="A+">Nhóm A+</option>
+                  <option value="A-">Nhóm A-</option>
+                  <option value="B+">Nhóm B+</option>
+                  <option value="B-">Nhóm B-</option>
+                  <option value="AB+">Nhóm AB+</option>
+                  <option value="AB-">Nhóm AB-</option>
+                </select>
+              </div>
+              <div className="w-[100px]">
+                <select 
+                  className="w-full h-10 bg-white border border-border rounded-lg px-3 text-sm focus:outline-none focus:ring-1 focus:ring-destructive"
+                  value={filters.radius}
+                  onChange={(e) => setFilters(prev => ({...prev, radius: e.target.value}))}
+                >
+                  {[3, 5, 10, 15, 20].map(r => <option key={r} value={r}>{r} km</option>)}
+                </select>
+              </div>
+            </div>
+
+            <button 
+              onClick={handleSearchDonors} disabled={isSearching}
+              className="w-full bg-destructive text-white h-10 rounded-lg text-sm font-bold flex items-center justify-center disabled:opacity-70"
+            >
+              <Search className="w-4 h-4 mr-2" /> {isSearching ? 'Đang tìm...' : 'Tìm kiếm'}
+            </button>
+
+            {searchError && <p className="text-xs text-red-600 mt-2 text-center">{searchError}</p>}
+
+            {/* Results */}
+            {searchResults.length > 0 && (
+              <div className="mt-4 border-t border-[#e5d5b7] pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-foreground cursor-pointer">
+                    <input type="checkbox" className="w-4 h-4 rounded accent-destructive" checked={selectedDonors.length === searchResults.length} onChange={handleSelectAll} />
+                    <span>Chọn tất cả ({selectedDonors.length}/{searchResults.length})</span>
+                  </label>
+                  <button onClick={handleBulkContact} disabled={isSearching || selectedDonors.length === 0} className="bg-destructive text-white text-xs px-3 py-1.5 rounded-md font-bold disabled:opacity-50 flex items-center">
+                    <Send className="w-3 h-3 mr-1" /> Gửi
+                  </button>
+                </div>
+
+                <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                  {searchResults.map(result => (
+                    <label key={result.user.id} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selectedDonors.includes(result.user.id) ? 'bg-[#fbe4e6] border-destructive' : 'bg-white border-transparent hover:bg-white/60'}`}>
+                      <input type="checkbox" className="w-4 h-4 rounded accent-destructive shrink-0" checked={selectedDonors.includes(result.user.id)} onChange={() => handleSelectDonor(result.user.id)} />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <h4 className="font-bold text-sm text-foreground truncate">{result.user.name}</h4>
+                          <span className="bg-destructive/10 text-destructive text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center shrink-0">
+                            <Droplet className="w-2.5 h-2.5 mr-0.5" /> {result.user.blood_type}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+                          <span className="flex items-center"><Phone className="w-3 h-3 mr-1" /> {result.user.phone}</span>
+                          <span className="flex items-center"><MapPin className="w-3 h-3 mr-1" /> {result.distance_km.toFixed(1)} km</span>
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Pending Donations Table */}
         <div className="bg-card rounded-3xl p-6 shadow-lg border border-muted mt-6 overflow-hidden">
           <div className="flex items-center justify-between mb-4">
