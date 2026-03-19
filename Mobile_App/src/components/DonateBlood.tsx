@@ -51,19 +51,19 @@ export function DonateBlood({ onComplete, onBack }: DonateBloodProps) {
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await api.get('/hospitals');
+        const response = await api.get('/blood-requests');
         
-        // API của bạn trả về { id, name, lat, lng }, ta cần format lại cho khớp với giao diện
-        const formattedLocations = response.data.hospitals.map((h: any) => ({
-          id: h.id,
-          name: h.name,
-          address: `Tọa độ: ${h.lat}, ${h.lng}`, // Tạm hiển thị tọa độ vì DB chưa có tên đường
-          available: true // Mặc định cho phép chọn
+        // Response format: { count, blood_requests: [...] }
+        const formattedLocations = response.data.blood_requests.map((r: any) => ({
+          id: r.id, // ID của request
+          name: r.hospital_name || r.address || 'Bệnh viện',
+          address: `Cần nhóm máu: ${r.blood_type} - ${r.amount_ml}ml`,
+          available: r.status === 'open'
         }));
         
         setLocations(formattedLocations);
       } catch (error) {
-        console.error("Lỗi tải danh sách bệnh viện:", error);
+        console.error("Lỗi tải danh sách yêu cầu hiến máu:", error);
       }
     };
 
@@ -257,7 +257,33 @@ export function DonateBlood({ onComplete, onBack }: DonateBloodProps) {
           {/* Submit Button */}
           {selectedLocation && selectedDate && selectedTime && (
             <div className="mt-6">
-              <Button className="w-full bg-destructive hover:bg-destructive/90 text-destructive-foreground py-6 text-base">
+              <Button 
+                onClick={async () => {
+                  try {
+                    const selectedLoc = locations.find(l => l.name === selectedLocation);
+                    if (!selectedLoc) return;
+
+                    // Giả định dùng Context API hoặc lấy user id đang đăng nhập
+                    const userIdStr = localStorage.getItem('userId');
+                    if (!userIdStr) {
+                      alert('Vui lòng đăng nhập lại');
+                      return;
+                    }
+                    
+                    const response = await api.post(`/blood-requests/${selectedLoc.id}/register`, {
+                      donor_id: parseInt(userIdStr),
+                      time_slot: selectedTime
+                    });
+
+                    alert(response.data.message || 'Đăng ký hiến máu thành công!');
+                    if (onBack) onBack();
+
+                  } catch (error: any) {
+                    alert(error.response?.data?.error || 'Lỗi khi đăng ký hiến máu');
+                  }
+                }}
+                className="w-full bg-destructive hover:bg-destructive/90 text-destructive-foreground py-6 text-base"
+              >
                 Xác nhận đăng ký hiến máu
               </Button>
               <p className="text-xs text-muted-foreground text-center mt-3">

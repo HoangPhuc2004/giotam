@@ -217,7 +217,7 @@ export default function DonationInfoPage() {
             <p className="text-lg mb-6">
               Nếu bạn đáp ứng các tiêu chuẩn trên, hãy đăng ký ngay để tham gia vào hoạt động hiến máu nhân đạo!
             </p>
-            <a href="/register">
+            <a href="/donate-blood">
               <button className="bg-white text-[#930511] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
                 Đăng ký ngay
               </button>
