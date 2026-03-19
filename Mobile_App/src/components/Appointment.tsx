@@ -1,7 +1,9 @@
 import { Calendar, MapPin, Clock, ChevronRight, AlertCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { PageHeader } from './PageHeader';
+import { api } from '../api';
+import { toast } from 'sonner';
 
 interface AppointmentProps {
   hasHealthDeclaration: boolean;
@@ -13,13 +15,25 @@ export function Appointment({ hasHealthDeclaration, onNavigateToDeclaration, onB
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [locations, setLocations] = useState<any[]>([]);
 
-  const locations = [
-    { id: 1, name: 'Bệnh viện Chợ Rẫy', address: 'Q.5, TP.HCM', available: true },
-    { id: 2, name: 'Bệnh viện Bình Dân', address: 'Q.3, TP.HCM', available: true },
-    { id: 3, name: 'Bệnh viện Nhi Đồng 1', address: 'Q.10, TP.HCM', available: false },
-    { id: 4, name: 'Bệnh viện 115', address: 'Q.10, TP.HCM', available: true },
-  ];
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const response = await api.get('/blood-requests');
+        const formattedLocations = response.data.blood_requests.map((r: any) => ({
+          id: r.id,
+          name: r.hospital_name || r.hospital_address || 'Bệnh viện',
+          address: `Cần nhóm máu: ${r.blood_type} - Lượng: ${r.amount_ml}ml - Độ khẩn cấp: ${r.urgency}`,
+          available: r.status === 'open'
+        }));
+        setLocations(formattedLocations);
+      } catch (error) {
+        console.error("Lỗi:", error);
+      }
+    };
+    fetchRequests();
+  }, []);
 
   const timeSlots = [
     '08:00 - 09:00',
@@ -175,7 +189,30 @@ export function Appointment({ hasHealthDeclaration, onNavigateToDeclaration, onB
         {/* Submit Button */}
         {selectedLocation && selectedDate && selectedTime && (
           <div className="pb-6">
-            <Button className="w-full bg-destructive hover:bg-destructive/90 text-destructive-foreground py-6 text-base rounded-2xl font-bold shadow-lg">
+            <Button onClick={async () => {
+              try {
+                const selectedLoc = locations.find(l => l.name === selectedLocation);
+                if (!selectedLoc) return;
+          
+                const userStr = localStorage.getItem('user');
+                if (!userStr) {
+                  toast.error('Vui lòng đăng nhập lại');
+                  onBack && onBack();
+                  return;
+                }
+                const user = JSON.parse(userStr);
+                
+                const response = await api.post(`/blood-requests/${selectedLoc.id}/register`, {
+                  donor_id: user.id,
+                  time_slot: selectedTime
+                });
+          
+                toast.success(response.data.message || 'Đăng ký hiến máu thành công!');
+                onBack && onBack();
+              } catch (error: any) {
+                toast.error(error.response?.data?.error || 'Lỗi khi đăng ký hiến máu');
+              }
+            }} className="w-full bg-destructive hover:bg-destructive/90 text-destructive-foreground py-6 text-base rounded-2xl font-bold shadow-lg">
               Xác nhận đăng ký hiến máu
             </Button>
             <p className="text-xs text-foreground/60 text-center mt-3">

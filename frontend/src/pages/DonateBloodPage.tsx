@@ -172,23 +172,23 @@ export default function DonateBloodPage() {
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 {/* Questions */}
                 <div className="p-8 space-y-8">
-                  <div className="space-y-4">
+                  <div className="bg-white rounded-xl border border-gray-100 p-6 space-y-4 shadow-sm">
                     <h3 className="font-bold text-lg text-[#930511]">1. Quý vị đã từng hiến máu chưa?</h3>
-                    <div className="bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="bg-gray-50 rounded-lg border border-gray-100">
                       <QuestionRow questionId="q1" text="" />
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="bg-white rounded-xl border border-gray-100 p-6 space-y-4 shadow-sm">
                     <h3 className="font-bold text-lg text-[#930511]">2. Quý vị đã từng mắc các bệnh như tâm thần, thần kinh, hô hấp, tiêu hóa, gan, tim mạch?</h3>
-                    <div className="bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="bg-gray-50 rounded-lg border border-gray-100">
                       <QuestionRow questionId="q2" text="" />
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="bg-white rounded-xl border border-gray-100 p-6 space-y-4 shadow-sm">
                     <h3 className="font-bold text-lg text-[#930511]">3. Trong vòng 6 tháng gần đây, Quý vị có:</h3>
-                    <div className="bg-gray-50 rounded-xl border border-gray-100 divide-y divide-gray-100">
+                    <div className="bg-gray-50 rounded-lg border border-gray-100 divide-y divide-gray-100">
                       <QuestionRow questionId="q3_1" text="Sút cân >= 4kg không rõ nguyên nhân? nổi hạch kéo dài?" />
                       <QuestionRow questionId="q3_2" text="Phẫu thuật?" />
                       <QuestionRow questionId="q3_3" text="Xăm mình, xỏ lỗ tai, lỗ mũi, châm cứu?" />
@@ -214,25 +214,25 @@ export default function DonateBloodPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="bg-white rounded-xl border border-gray-100 p-6 space-y-4 shadow-sm">
                     <h3 className="font-bold text-lg text-[#930511]">4. Trong vòng 02 tuần gần đây, Quý vị có:</h3>
-                    <div className="bg-gray-50 rounded-xl border border-gray-100 divide-y divide-gray-100">
+                    <div className="bg-gray-50 rounded-lg border border-gray-100 divide-y divide-gray-100">
                       <QuestionRow questionId="q4_1" text="Tiếp xúc với người bệnh/nghi ngờ nhiễm Covid-19?" />
                       <QuestionRow questionId="q4_2" text="Xuất hiện các dấu hiệu: sốt, ho, khó thở, tiêu chảy?" />
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="bg-white rounded-xl border border-gray-100 p-6 space-y-4 shadow-sm">
                     <h3 className="font-bold text-lg text-[#930511]">5. Trong vòng 01 tuần gần đây, Quý vị có:</h3>
-                    <div className="bg-gray-50 rounded-xl border border-gray-100 divide-y divide-gray-100">
+                    <div className="bg-gray-50 rounded-lg border border-gray-100 divide-y divide-gray-100">
                       <QuestionRow questionId="q5_1" text="Dùng thuốc kháng sinh, Aspirin, Corticoid,...?" />
                       <QuestionRow questionId="q5_2" text="Đi khám sức khỏe, làm xét nghiệm, chữa răng?" />
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="bg-white rounded-xl border border-gray-100 p-6 space-y-4 shadow-sm">
                     <h3 className="font-bold text-lg text-[#930511]">6. Đối tượng khuyết tật nặng?</h3>
-                    <div className="bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="bg-gray-50 rounded-lg border border-gray-100">
                       <QuestionRow questionId="q6" text="" />
                     </div>
                   </div>
