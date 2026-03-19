@@ -153,7 +153,7 @@ export function Auth({ onLogin }: AuthProps) {
 
       {/* ── LOGIN FORM ───────────────────────────────────────────────────── */}
       {isLogin ? (
-        <div className="flex-1 flex flex-col items-center justify-center px-8 py-10">
+        <div className="flex-1 flex flex-col items-center justify-center px-10 py-10">
           {/* Title */}
           <div className="text-center mb-8 w-full max-w-sm">
             <h1 className="text-4xl font-bold uppercase tracking-wide mb-2" style={{ color: '#1a1a1a' }}>Đăng nhập</h1>
