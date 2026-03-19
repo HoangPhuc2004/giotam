@@ -7,7 +7,6 @@ import { Label } from '../components/ui/label';
 import { toast } from 'sonner@2.0.3';
 import Logo from '../components/Logo';
 import { X, Loader2 } from 'lucide-react';
-import api from '../utils/api';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -39,21 +38,12 @@ export default function LoginPage() {
       return;
     }
     
-    // Gửi request API quên mật khẩu (Giả lập hoặc dùng API thật nếu có)
     setIsForgotLoading(true);
-    try {
-      // Endpoint giả định cho API quên mật khẩu
-      await api.post('/users/forgot-password', { email: forgotEmail })
-        .catch(() => { /* Bỏ qua lỗi 404 nếu API chưa có, cứ cho là thành công ở màn hình app */ });
-      
-      // Hiển thị màn hình thành công dù API có lỗi (bảo mật email)
+    // Giả lập delay như mobile app
+    setTimeout(() => {
       setForgotSent(true);
-    } catch (error) {
-      // Vẫn hiển thị sent = true để không tiết lộ email có tồn tại hay không
-      setForgotSent(true); 
-    } finally {
       setIsForgotLoading(false);
-    }
+    }, 800);
   };
 
   return (
