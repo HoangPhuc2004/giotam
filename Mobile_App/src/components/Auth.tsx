@@ -144,81 +144,86 @@ export function Auth({ onLogin }: AuthProps) {
   const inputClass =
     'w-full mt-1 px-3 py-2.5 bg-muted border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-destructive/40 focus:border-destructive transition-colors text-sm';
   const labelClass = 'block text-sm font-medium text-foreground';
-  const submitBtn =
-    'bg-destructive text-destructive-foreground font-semibold px-16 py-2.5 rounded-full hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60';
 
   return (
     <div
       style={{ backgroundColor: '#FBF2E1', fontFamily: 'Georgia, "Times New Roman", serif' }}
       className="min-h-screen flex flex-col"
     >
+
       {/* ── LOGIN FORM ───────────────────────────────────────────────────── */}
       {isLogin ? (
-        <div className="flex-1 flex flex-col items-center justify-center px-10 py-10">
+        <div className="flex-1 flex flex-col items-center justify-center px-8 py-10">
           {/* Title */}
-          <div className="text-center mb-10 w-full max-w-sm">
+          <div className="text-center mb-8 w-full max-w-sm">
             <h1 className="text-4xl font-bold uppercase tracking-wide mb-2" style={{ color: '#1a1a1a' }}>Đăng nhập</h1>
             <p className="text-muted-foreground text-sm">Chào mừng trở lại với GIỌT ẤM</p>
           </div>
 
-          {/* Form – no card */}
-          <form onSubmit={handleLoginSubmit} className="w-full max-w-sm space-y-8">
-            {loginError && (
-              <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg flex items-center gap-2 text-sm">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{loginError}</span>
-              </div>
-            )}
+          {/* Card */}
+          <div className="w-full max-w-sm bg-card rounded-2xl px-7 py-8 shadow-md border border-border">
+            <form onSubmit={handleLoginSubmit} className="space-y-6">
+              {loginError && (
+                <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg flex items-center gap-2 text-sm">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{loginError}</span>
+                </div>
+              )}
 
-            <div>
-              <label className={labelClass}>Email</label>
-              <input
-                type="email"
-                placeholder="example@gmail.com"
-                value={loginForm.email}
-                onChange={(e) => { setLoginForm({ ...loginForm, email: e.target.value }); setLoginError(null); }}
-                required
-                disabled={isLoginLoading}
-                className={inputClass}
-              />
-            </div>
-
-            <div>
-              <label className={labelClass}>Mật khẩu</label>
-              <div className="relative">
+              <div>
+                <label className={labelClass}>Email</label>
                 <input
-                  type={showLoginPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  value={loginForm.password}
-                  onChange={(e) => { setLoginForm({ ...loginForm, password: e.target.value }); setLoginError(null); }}
+                  type="email"
+                  placeholder="example@gmail.com"
+                  value={loginForm.email}
+                  onChange={(e) => { setLoginForm({ ...loginForm, email: e.target.value }); setLoginError(null); }}
                   required
                   disabled={isLoginLoading}
-                  className={`${inputClass} pr-10`}
+                  className={inputClass}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
               </div>
-            </div>
 
-            <div className="flex flex-col items-center gap-4 pt-4">
-              <button type="submit" disabled={isLoginLoading} className={submitBtn}>
+              <div>
+                <label className={labelClass}>Mật khẩu</label>
+                <div className="relative">
+                  <input
+                    type={showLoginPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={loginForm.password}
+                    onChange={(e) => { setLoginForm({ ...loginForm, password: e.target.value }); setLoginError(null); }}
+                    required
+                    disabled={isLoginLoading}
+                    className={`${inputClass} pr-10`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowLoginPassword(!showLoginPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoginLoading}
+                className="w-full bg-destructive text-destructive-foreground font-semibold py-3 rounded-xl hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+              >
                 {isLoginLoading ? (<><Loader2 className="w-4 h-4 animate-spin" />Đang xử lý...</>) : 'Đăng nhập'}
               </button>
-              <p className="text-sm text-muted-foreground">
+
+              <p className="text-center text-sm text-muted-foreground">
                 Chưa có tài khoản?{' '}
                 <button type="button" onClick={() => { setIsLogin(false); setLoginError(null); }} className="text-destructive font-semibold hover:underline">
                   Đăng ký ngay
                 </button>
               </p>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       ) : (
+
         /* ── REGISTER FORM ─────────────────────────────────────────────── */
         <div className="w-full max-w-sm mx-auto px-8 py-10">
           {/* Title */}
@@ -318,7 +323,11 @@ export function Auth({ onLogin }: AuthProps) {
 
             {/* Submit */}
             <div className="flex flex-col items-center gap-4 pb-6">
-              <button type="submit" disabled={isRegLoading} className={submitBtn}>
+              <button
+                type="submit"
+                disabled={isRegLoading}
+                className="w-full bg-destructive text-destructive-foreground font-semibold py-3 rounded-xl hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+              >
                 {isRegLoading ? (<><Loader2 className="w-4 h-4 animate-spin" />Đang xử lý...</>) : 'Đăng ký'}
               </button>
               <p className="text-sm text-muted-foreground">
