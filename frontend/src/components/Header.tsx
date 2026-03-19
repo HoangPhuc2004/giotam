@@ -37,35 +37,47 @@ export default function Header() {
             </Link>
             
             <nav className="hidden md:flex items-center gap-8 flex-1">
-              <Link to="/about" className="text-black hover:text-[#930511] transition-colors">
-                Giới thiệu
-              </Link>
-              <Link to="/donation-info" className="text-black hover:text-[#930511] transition-colors">
-                Tiêu chuẩn hiến máu
-              </Link>
-              <Link to="/news" className="text-black hover:text-[#930511] transition-colors">
-                Tin tức hoạt động
-              </Link>
-              <Link to="/terms" className="text-black hover:text-[#930511] transition-colors">
-                Điều khoản & điều kiện
-              </Link>
-              <Link to="/contact" className="text-black hover:text-[#930511] transition-colors">
-                Liên hệ
-              </Link>
-              
-              <Button 
-                variant="outline" 
-                className="border-[#930511] text-[#930511] hover:bg-[#930511] hover:text-white"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log('🖱️ Button clicked!');
-                  setIsDonateOpen(true);
-                }}
-                type="button"
-              >
-                Quyên góp
-              </Button>
+              {(user?.role === 'admin' || user?.role === 'hospital') ? (
+                <>
+                  <Link to="/account" className="text-black hover:text-[#930511] font-medium transition-colors">
+                    Trang chủ
+                  </Link>
+                  <Link to="/dashboard" className="text-black hover:text-[#930511] font-medium transition-colors">
+                    Dashboard theo dõi
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/about" className="text-black hover:text-[#930511] transition-colors">
+                    Giới thiệu
+                  </Link>
+                  <Link to="/donation-info" className="text-black hover:text-[#930511] transition-colors">
+                    Tiêu chuẩn hiến máu
+                  </Link>
+                  <Link to="/news" className="text-black hover:text-[#930511] transition-colors">
+                    Tin tức hoạt động
+                  </Link>
+                  <Link to="/terms" className="text-black hover:text-[#930511] transition-colors">
+                    Điều khoản & điều kiện
+                  </Link>
+                  <Link to="/contact" className="text-black hover:text-[#930511] transition-colors">
+                    Liên hệ
+                  </Link>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="border-[#930511] text-[#930511] hover:bg-[#930511] hover:text-white"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsDonateOpen(true);
+                    }}
+                    type="button"
+                  >
+                    Quyên góp
+                  </Button>
+                </>
+              )}
             </nav>
 
             <div className="flex items-center gap-3">
@@ -110,36 +122,48 @@ export default function Header() {
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-gray-200">
               <nav className="flex flex-col gap-4">
-                <Link to="/about" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                  Giới thiệu
-                </Link>
-                <Link to="/donation-info" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                  Tiêu chuẩn hiến máu
-                </Link>
-                <Link to="/news" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                  Tin tức hoạt động
-                </Link>
-                <Link to="/terms" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                  Điều khoản & điều kiện
-                </Link>
-                <Link to="/contact" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                  Liên hệ
-                </Link>
+                {(user?.role === 'admin' || user?.role === 'hospital') ? (
+                  <>
+                    <Link to="/account" className="text-black hover:text-[#930511] font-medium transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                      Trang chủ
+                    </Link>
+                    <Link to="/dashboard" className="text-black hover:text-[#930511] font-medium transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                      Dashboard theo dõi
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/about" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                      Giới thiệu
+                    </Link>
+                    <Link to="/donation-info" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                      Tiêu chuẩn hiến máu
+                    </Link>
+                    <Link to="/news" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                      Tin tức hoạt động
+                    </Link>
+                    <Link to="/terms" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                      Điều khoản & điều kiện
+                    </Link>
+                    <Link to="/contact" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                      Liên hệ
+                    </Link>
 
-                <Button 
-                  variant="outline" 
-                  className="w-full !bg-[#930511] !text-white !border-[#930511] hover:!bg-[#7a0410] hover:!text-white hover:!border-[#7a0410]"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('🖱️ Mobile button clicked!');
-                    setIsDonateOpen(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  type="button"
-                >
-                  Quyên góp
-                </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full !bg-[#930511] !text-white !border-[#930511] hover:!bg-[#7a0410] hover:!text-white hover:!border-[#7a0410]"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsDonateOpen(true);
+                        setMobileMenuOpen(false);
+                      }}
+                      type="button"
+                    >
+                      Quyên góp
+                    </Button>
+                  </>
+                )}
 
                 {user ? (
                   <>
