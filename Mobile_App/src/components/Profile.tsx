@@ -317,6 +317,17 @@ export function Profile({ onLogout, onBack }: ProfileProps) {
         </div>
       </div>
 
+      {/* Logout Button */}
+      <div className="px-4 mt-4">
+        <button
+          onClick={onLogout}
+          className="w-full p-4 flex items-center justify-center space-x-3 bg-destructive/10 hover:bg-destructive/20 transition-colors rounded-2xl text-destructive font-semibold"
+        >
+          <LogOut className="w-5 h-5" />
+          <span>Đăng xuất</span>
+        </button>
+      </div>
+
       {/* Version */}
       <div className="text-center mt-6 text-xs text-muted-foreground mb-20">
         Version 1.0.0
