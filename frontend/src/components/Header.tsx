@@ -32,16 +32,13 @@ export default function Header() {
       <header className="bg-white border-b border-gray-200 relative z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center py-4 gap-8">
-            <Link to="/" className="flex items-center gap-2 shrink-0">
+            <Link to={(user?.role === 'admin' || user?.role === 'hospital') ? "/account" : "/"} className="flex items-center gap-2 shrink-0">
               <Logo className="w-10 h-10" />
             </Link>
             
             <nav className="hidden md:flex items-center gap-8 flex-1">
               {(user?.role === 'admin' || user?.role === 'hospital') ? (
                 <>
-                  <Link to="/account" className="text-black hover:text-[#930511] font-medium transition-colors">
-                    Trang chủ
-                  </Link>
                   <Link to="/dashboard" className="text-black hover:text-[#930511] font-medium transition-colors">
                     Dashboard theo dõi
                   </Link>
@@ -124,9 +121,6 @@ export default function Header() {
               <nav className="flex flex-col gap-4">
                 {(user?.role === 'admin' || user?.role === 'hospital') ? (
                   <>
-                    <Link to="/account" className="text-black hover:text-[#930511] font-medium transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                      Trang chủ
-                    </Link>
                     <Link to="/dashboard" className="text-black hover:text-[#930511] font-medium transition-colors" onClick={() => setMobileMenuOpen(false)}>
                       Dashboard theo dõi
                     </Link>
