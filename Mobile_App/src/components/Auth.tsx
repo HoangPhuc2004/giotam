@@ -286,7 +286,7 @@ export function Auth({ onLogin }: AuthProps) {
                 <button
                   type="button"
                   onClick={() => { setForgotEmail(''); setForgotSent(false); setShowForgotModal(true); }}
-                  style={{ background: 'none', border: 'none', color: '#aaa', cursor: 'pointer', fontSize: '13px', padding: 0, textDecoration: 'underline' }}
+                  style={{ background: 'none', border: 'none', color: '#8B0000', cursor: 'pointer', fontSize: '13px', padding: 0, textDecoration: 'underline' }}
                 >
                   Quên mật khẩu?
                 </button>
