@@ -8,6 +8,8 @@ import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import HospitalHome from '../components/HospitalHome';
 
 // Counter component with animation
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
@@ -36,6 +38,20 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 }
 
 export default function HomePage() {
+  const { user } = useAuth();
+  
+  if (user?.role === 'hospital' || user?.role === 'admin') {
+    return (
+      <div className="min-h-screen bg-[#FBF2E1]" style={{ fontFamily: 'Times New Roman, serif' }}>
+        <Header />
+        <main className="py-8">
+           <HospitalHome />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#FBF2E1]" style={{ fontFamily: 'Times New Roman, serif' }}>
       <Header />
