@@ -293,7 +293,7 @@ export function Auth({ onLogin }: AuthProps) {
 
               {/* Nút đăng nhập */}
               <button type="submit" disabled={isLoginLoading} style={btnPrimary}>
-                {isLoginLoading ? (<><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />Đang xử lý...</>) : 'Đăng nhập'}
+                {isLoginLoading ? (<><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />Đang kết nối...</>) : 'Đăng nhập'}
               </button>
 
               {/* Link đăng ký */}

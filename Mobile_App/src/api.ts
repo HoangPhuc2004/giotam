@@ -7,6 +7,7 @@ export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const api = axios.create({
   baseURL: API_URL,
+  timeout: 60000, // 60s – Render free tier cần đến 50s để cold-start
   headers: {
     'Content-Type': 'application/json',
     'ngrok-skip-browser-warning': '69420',
