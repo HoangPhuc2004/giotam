@@ -145,7 +145,7 @@ export function Auth({ onLogin }: AuthProps) {
     'w-full mt-1 px-3 py-2.5 bg-muted border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-destructive/40 focus:border-destructive transition-colors text-sm';
   const labelClass = 'block text-sm font-medium text-foreground';
   const submitBtn =
-    'bg-destructive text-destructive-foreground font-semibold px-10 py-2.5 rounded-full hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60';
+    'bg-destructive text-destructive-foreground font-semibold px-16 py-2.5 rounded-full hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60';
 
   return (
     <div
@@ -154,7 +154,7 @@ export function Auth({ onLogin }: AuthProps) {
     >
       {/* ── LOGIN FORM ───────────────────────────────────────────────────── */}
       {isLogin ? (
-        <div className="flex-1 flex flex-col items-center justify-center px-8 py-10">
+        <div className="flex-1 flex flex-col items-center justify-center px-10 py-10">
           {/* Title */}
           <div className="text-center mb-10 w-full max-w-sm">
             <h1 className="text-4xl font-bold uppercase tracking-wide mb-2" style={{ color: '#1a1a1a' }}>Đăng nhập</h1>
@@ -205,7 +205,7 @@ export function Auth({ onLogin }: AuthProps) {
               </div>
             </div>
 
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-4 pt-4">
               <button type="submit" disabled={isLoginLoading} className={submitBtn}>
                 {isLoginLoading ? (<><Loader2 className="w-4 h-4 animate-spin" />Đang xử lý...</>) : 'Đăng nhập'}
               </button>
