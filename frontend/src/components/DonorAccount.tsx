@@ -157,7 +157,7 @@ export default function DonorAccount() {
     <div className="space-y-8">
       {/* Header của trang tài khoản */}
       <div className="flex justify-between items-center">
-        <h1>Tài khoản tình nguyện viên</h1>
+        <h1 className="text-3xl font-bold text-[#930511]">Tài khoản tình nguyện viên</h1>
         {/* Chỉ hiển thị nút "Chỉnh sửa" khi đã có thông tin và không đang ở chế độ chỉnh sửa */}
         {user.name && !isEditing && (
           <Button
@@ -172,7 +172,7 @@ export default function DonorAccount() {
       {/* Card chứa form hoặc thông tin hiển thị */}
       <Card>
         <CardHeader>
-          <CardTitle>{isEditing ? 'Cập nhật thông tin cá nhân' : 'Hồ sơ cá nhân'}</CardTitle>
+          <CardTitle className="text-2xl font-bold text-[#930511]">{isEditing ? 'Cập nhật thông tin cá nhân' : 'Hồ sơ cá nhân'}</CardTitle>
           {!isEditing && <p className="text-sm text-gray-500 pt-1">Đây là thông tin bạn đã đăng ký.</p>}
           {isEditing && !user.name && <p className="text-sm text-red-600 pt-1">Vui lòng cập nhật đầy đủ thông tin của bạn.</p>}
         </CardHeader>
@@ -254,28 +254,28 @@ export default function DonorAccount() {
             // Phần hiển thị thông tin khi không chỉnh sửa
              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                <div>
-                  <p className="text-sm text-gray-600 mb-1">Họ và tên</p>
+                  <p className="font-bold text-base text-[#930511] mb-1">Họ và tên</p>
                   <div className="flex items-center gap-2"><UserIcon className="w-4 h-4 text-gray-500 shrink-0" /> <p className="font-medium">{formData.fullName || 'Chưa cập nhật'}</p></div>
                </div>
                <div>
-                  <p className="text-sm text-gray-600 mb-1">Số điện thoại</p>
+                  <p className="font-bold text-base text-[#930511] mb-1">Số điện thoại</p>
                    <div className="flex items-center gap-2"><Phone className="w-4 h-4 text-gray-500 shrink-0" /><p className="font-medium">{formData.phone || 'Chưa cập nhật'}</p></div>
                </div>
                <div>
-                  <p className="text-sm text-gray-600 mb-1">Email</p>
+                  <p className="font-bold text-base text-[#930511] mb-1">Email</p>
                   <div className="flex items-center gap-2"><Mail className="w-4 h-4 text-gray-500 shrink-0" /><p className="font-medium">{formData.email}</p></div>
                </div>
                <div>
-                  <p className="text-sm text-gray-600 mb-1">Nhóm máu</p>
+                  <p className="font-bold text-base text-[#930511] mb-1">Nhóm máu</p>
                   <div className="flex items-center gap-2"><Droplet className="w-4 h-4 text-[#930511] shrink-0" /> <p className="font-medium">{formData.bloodType || 'Chưa cập nhật'}</p></div>
                </div>
                <div className="md:col-span-2">
-                  <p className="text-sm text-gray-600 mb-1">Địa chỉ</p>
+                  <p className="font-bold text-base text-[#930511] mb-1">Địa chỉ</p>
                   <div className="flex items-center gap-2"><MapPin className="w-4 h-4 text-gray-500 shrink-0" /><p className="font-medium">{formData.address || 'Chưa cập nhật'}</p></div>
                </div>
                {/* <div><p className="text-sm text-gray-600 mb-1">Mã số BHYT</p>...</div> */}
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Ngày hiến gần nhất</p>
+                  <p className="font-bold text-base text-[#930511] mb-1">Ngày hiến gần nhất</p>
                    <div className="flex items-center gap-2"><Calendar className="w-4 h-4 text-gray-500 shrink-0" /><p className="font-medium">{formData.lastDonationDate ? new Date(formData.lastDonationDate).toLocaleDateString('vi-VN') : 'Chưa hiến lần nào'}</p></div>
                </div>
             </div>
@@ -287,7 +287,7 @@ export default function DonorAccount() {
       {!isEditing && user.name && (
         <Card>
           <CardHeader>
-            <CardTitle>Danh hiệu & Huy hiệu</CardTitle>
+            <CardTitle className="text-2xl font-bold text-[#930511]">Danh hiệu & Huy hiệu</CardTitle>
             <p className="text-sm text-gray-500 pt-1">Thành tích hiến máu của bạn</p>
           </CardHeader>
           <CardContent>
@@ -339,7 +339,7 @@ export default function DonorAccount() {
       {!isEditing && user.name && (
         <Card>
           <CardHeader>
-            <CardTitle>Lịch sử hiến máu</CardTitle>
+            <CardTitle className="text-2xl font-bold text-[#930511]">Lịch sử hiến máu</CardTitle>
           </CardHeader>
           <CardContent>
             {loadingHistory ? (
