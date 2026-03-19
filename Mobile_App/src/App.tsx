@@ -78,12 +78,12 @@ export default function App() {
     setActiveTab('home');
   };
 
-  if (userRole === 'admin') {
+  if (userRole === 'admin' || userRole === 'hospital') {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="w-[393px] h-[852px] bg-background flex flex-col overflow-hidden relative shadow-2xl">
           <div className="flex-1 overflow-y-auto">
-            <AdminDashboard onLogout={handleLogout} />
+            <AdminDashboard onLogout={handleLogout} userRole={userRole} />
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { api } from '../api';
 
 interface AdminDashboardProps {
   onLogout: () => void;
+  userRole?: string;
 }
 
 interface PendingRecord {
@@ -15,7 +16,7 @@ interface PendingRecord {
   donation_date: string;
 }
 
-export function AdminDashboard({ onLogout }: AdminDashboardProps) {
+export function AdminDashboard({ onLogout, userRole = 'admin' }: AdminDashboardProps) {
   const [stats, setStats] = useState({ users: 0, hospitals: 0, accepted: 0 });
   const [chartData, setChartData] = useState<any[]>([]);
   const [pendingRecords, setPendingRecords] = useState<PendingRecord[]>([]);
@@ -111,12 +112,16 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
       {/* Header */}
       <div className="bg-destructive px-6 pt-12 pb-6 rounded-b-[40px] shadow-lg sticky top-0 z-10 w-[393px]">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
+          <h1 className="text-2xl font-bold text-white">
+            {userRole === 'hospital' ? 'Hospital Dashboard' : 'Admin Dashboard'}
+          </h1>
           <button onClick={onLogout} className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
             <LogOut className="w-5 h-5 text-white" />
           </button>
         </div>
-        <p className="text-white/80 mt-2 text-sm">Quản lý hệ thống Giọt Ấm</p>
+        <p className="text-white/80 mt-2 text-sm">
+          {userRole === 'hospital' ? 'Quản lý yêu cầu hiến máu' : 'Quản lý hệ thống Giọt Ấm'}
+        </p>
       </div>
 
       <div className="px-4 mt-6 space-y-6">
