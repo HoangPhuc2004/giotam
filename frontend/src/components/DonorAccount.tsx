@@ -7,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { toast } from 'sonner';
 // Import các icon cần thiết
-import { Calendar, Droplet, MapPin, User as UserIcon, Phone, Mail } from 'lucide-react';
+import { Calendar, Droplet, MapPin, User as UserIcon, Phone, Mail, Award, Trophy, Star } from 'lucide-react';
+import api from '../api/api';
 
 // Định nghĩa lại interface User nếu cần (hoặc import từ AuthContext)
 interface User {
@@ -65,11 +66,50 @@ export default function DonorAccount() {
     }
   }, [user]); // Dependency array: chạy lại effect khi `user` thay đổi
 
-  // Mock donation history (có thể thay bằng gọi API sau)
-  const donationHistory = [
-    { id: 1, date: '15/08/2025', location: 'Bệnh viện Chợ Rẫy', amount: '350ml', bloodType: user?.blood_type || 'N/A' },
-    { id: 2, date: '10/06/2025', location: 'Bệnh viện Từ Dũ', amount: '450ml', bloodType: user?.blood_type || 'N/A' },
-    { id: 3, date: '05/04/2025', location: 'Bệnh viện Nhân Dân 115', amount: '350ml', bloodType: user?.blood_type || 'N/A' },
+  const [donationHistory, setDonationHistory] = useState<any[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+
+  useEffect(() => {
+    if (user?.id) {
+      const fetchHistory = async () => {
+        setLoadingHistory(true);
+        try {
+          const res = await api.get(`/users/${user.id}/history`);
+          if (res.data?.history) {
+            setDonationHistory(res.data.history);
+          }
+        } catch (error) {
+          console.error("Lỗi lấy lịch sử hiến máu:", error);
+        } finally {
+          setLoadingHistory(false);
+        }
+      };
+      fetchHistory();
+    }
+  }, [user?.id]);
+
+  const donationsCountNum = user?.donations_count || 0;
+  const rewardPoints = user?.reward_points || 0;
+  
+  const achievements = [
+    {
+      title: 'Người hùng hiến máu',
+      description: 'Hiến máu lần đầu tiên',
+      unlocked: donationsCountNum >= 1,
+      Icon: Award,
+    },
+    {
+      title: 'Chiến binh cứu người',
+      description: 'Hiến máu 5 lần',
+      unlocked: donationsCountNum >= 5,
+      Icon: Star,
+    },
+    {
+      title: 'Anh hùng máu vàng',
+      description: 'Hiến máu 10 lần',
+      unlocked: donationsCountNum >= 10,
+      Icon: Trophy,
+    },
   ];
 
   // Xử lý khi submit form cập nhật
@@ -243,38 +283,97 @@ export default function DonorAccount() {
         </CardContent>
       </Card>
 
-      {/* Lịch sử hiến máu (chỉ hiển thị khi không chỉnh sửa và đã có profile) */}
+      {/* Phần Danh hiệu & Huy hiệu */}
       {!isEditing && user.name && (
         <Card>
           <CardHeader>
-            <CardTitle>Lịch sử hiến máu (Demo)</CardTitle>
+            <CardTitle>Danh hiệu & Huy hiệu</CardTitle>
+            <p className="text-sm text-gray-500 pt-1">Thành tích hiến máu của bạn</p>
           </CardHeader>
           <CardContent>
-            {donationHistory.length > 0 ? (
-              <div className="space-y-4">
-                {donationHistory.map((donation) => (
-                  <div key={donation.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-[#FBF2E1] rounded-lg gap-3">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#930511] rounded-full flex items-center justify-center text-white shrink-0">
-                        <Droplet className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-1 text-sm sm:text-base">
-                          <Calendar className="w-4 h-4 text-gray-600" />
-                          <span className="font-medium">{donation.date}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
-                          <MapPin className="w-4 h-4" />
-                          <span>{donation.location}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-left sm:text-right mt-2 sm:mt-0 w-full sm:w-auto">
-                      <p className="text-[#930511] font-semibold text-sm sm:text-base">{donation.amount}</p>
-                      <p className="text-xs sm:text-sm text-gray-600">Nhóm {donation.bloodType}</p>
-                    </div>
+            <div className="flex items-center gap-4 mb-6 p-4 bg-red-50 rounded-xl">
+              <div className="w-12 h-12 bg-[#930511] rounded-full flex items-center justify-center">
+                <Trophy className="w-6 h-6 text-yellow-400" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600 font-medium">Điểm tích lũy</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-2xl font-bold text-[#930511]">{rewardPoints}</span>
+                  <span className="text-sm font-medium text-[#930511]">điểm</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {achievements.map((ach, idx) => (
+                <div 
+                  key={idx} 
+                  className={`p-4 rounded-xl border-2 flex items-start gap-4 transition-all
+                    ${ach.unlocked 
+                      ? 'border-[#930511] bg-white shadow-sm' 
+                      : 'border-gray-100 bg-gray-50 opacity-60 grayscale'}`}
+                >
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0
+                    ${ach.unlocked ? 'bg-yellow-100' : 'bg-gray-200'}`}>
+                    <ach.Icon className={`w-6 h-6 ${ach.unlocked ? 'text-yellow-600' : 'text-gray-400'}`} />
                   </div>
-                ))}
+                  <div>
+                    <h4 className={`font-bold text-sm ${ach.unlocked ? 'text-gray-900' : 'text-gray-500'}`}>
+                      {ach.title}
+                    </h4>
+                    <p className="text-xs text-gray-500 mt-1">{ach.description}</p>
+                    {ach.unlocked && (
+                      <span className="inline-block mt-2 text-[10px] font-bold uppercase tracking-wider text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                        Đã đạt
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Lịch sử hiến máu */}
+      {!isEditing && user.name && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Lịch sử hiến máu</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loadingHistory ? (
+              <div className="text-center py-6">
+                <p className="text-gray-500">Đang tải lịch sử hiến máu...</p>
+              </div>
+            ) : donationHistory.length > 0 ? (
+              <div className="space-y-4">
+                {donationHistory.map((donation) => {
+                  const dateStr = new Date(donation.donation_date).toLocaleDateString('vi-VN');
+                  return (
+                    <div key={donation.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-[#FBF2E1] rounded-lg gap-3">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#930511] rounded-full flex items-center justify-center text-white shrink-0">
+                          <Droplet className="w-5 h-5 sm:w-6 sm:h-6" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1 text-sm sm:text-base">
+                            <Calendar className="w-4 h-4 text-gray-600" />
+                            <span className="font-medium">{dateStr}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+                            <MapPin className="w-4 h-4" />
+                            <span>{donation.hospital_name} - Trạng thái: {donation.status}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-left sm:text-right mt-2 sm:mt-0 w-full sm:w-auto">
+                        <p className="text-[#930511] font-semibold text-sm sm:text-base">{donation.amount_ml}ml</p>
+                        <p className="text-xs sm:text-sm text-gray-600">Điểm nhân được: +{donation.points_earned || 0}</p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             ) : (
                 <p className="text-gray-500 italic">Chưa có lịch sử hiến máu.</p>

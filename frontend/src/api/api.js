@@ -21,3 +21,5 @@ export const createAlert = async (alertData) => {
 };
 
 // ... các hàm khác
+
+export default api;

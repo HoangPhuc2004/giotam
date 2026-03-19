@@ -3,11 +3,12 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Button } from '../components/ui/button';
 import Logo from '../components/Logo';
-import { Heart, Users, Droplet, CheckCircle, Building2, Phone, Mail, ChevronDown } from 'lucide-react';
+import { Heart, Users, Droplet, CheckCircle, Building2, Phone, Mail, ChevronDown, Trophy, Star } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
 import { useState, useEffect } from 'react';
+import api from '../api/api';
 
 // Counter component with animation
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
@@ -36,6 +37,25 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 }
 
 export default function HomePage() {
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [loadingLeaderboard, setLoadingLeaderboard] = useState(true);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await api.get('/leaderboard');
+        if (res.data?.leaderboard) {
+          setLeaderboard(res.data.leaderboard.slice(0, 5)); // Lấy top 5 hiển thị trang chủ
+        }
+      } catch (err) {
+        console.error('Failed to fetch leaderboard:', err);
+      } finally {
+        setLoadingLeaderboard(false);
+      }
+    };
+    fetchLeaderboard();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#FBF2E1]" style={{ fontFamily: 'Times New Roman, serif' }}>
       <Header />
@@ -109,6 +129,53 @@ export default function HomePage() {
                   <p className="text-base">Ca cấp cứu được hỗ trợ</p>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Leaderboard Section */}
+        <section className="bg-[#FBF2E1] py-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="mb-12 text-center text-3xl md:text-4xl font-bold uppercase tracking-wide text-[#930511] flex items-center justify-center gap-3">
+              <Trophy className="w-8 h-8 text-yellow-500 fill-yellow-500" />
+              Bảng vinh danh
+            </h2>
+            <div className="bg-white rounded-3xl p-6 shadow-xl">
+              {loadingLeaderboard ? (
+                <div className="text-center py-8 text-gray-500">Đang tải bảng xếp hạng...</div>
+              ) : leaderboard.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">Chưa có dữ liệu bảng xếp hạng.</div>
+              ) : (
+                <div className="space-y-4">
+                  {leaderboard.map((userObj, index) => (
+                    <div key={userObj.id} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-red-50 transition-colors border">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg
+                          ${index === 0 ? 'bg-yellow-400 text-white shadow-lg shadow-yellow-200' : 
+                            index === 1 ? 'bg-gray-300 text-white shadow-lg shadow-gray-200' : 
+                            index === 2 ? 'bg-amber-600 text-white shadow-lg shadow-amber-200' : 
+                            'bg-gray-100 text-gray-600'}`}>
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="font-bold text-lg text-gray-900">{userObj.name}</p>
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Droplet className="w-4 h-4 text-[#930511]" />
+                            <span>Hiến {userObj.donations_count} lần</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="flex items-center gap-1 justify-end">
+                          <span className="font-black text-xl text-[#930511]">{userObj.reward_points}</span>
+                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                        </div>
+                        <p className="text-xs text-gray-500">điểm</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>
