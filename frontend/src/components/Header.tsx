@@ -46,6 +46,9 @@ export default function Header() {
               <Link to="/news" className="text-black hover:text-[#930511] transition-colors">
                 Tin tức hoạt động
               </Link>
+              <Link to="/terms" className="text-black hover:text-[#930511] transition-colors">
+                Điều khoản & điều kiện
+              </Link>
               <Link to="/contact" className="text-black hover:text-[#930511] transition-colors">
                 Liên hệ
               </Link>
@@ -115,6 +118,9 @@ export default function Header() {
                 </Link>
                 <Link to="/news" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
                   Tin tức hoạt động
+                </Link>
+                <Link to="/terms" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  Điều khoản & điều kiện
                 </Link>
                 <Link to="/contact" className="text-black hover:text-[#930511] transition-colors" onClick={() => setMobileMenuOpen(false)}>
                   Liên hệ
