@@ -340,8 +340,8 @@ export function AdminDashboard({ onLogout, userRole = 'admin' }: AdminDashboardP
                     <input type="checkbox" className="w-4 h-4 rounded accent-destructive" checked={selectedDonors.length === searchResults.length} onChange={handleSelectAll} />
                     <span>Chọn tất cả ({selectedDonors.length}/{searchResults.length})</span>
                   </label>
-                  <button onClick={handleBulkContact} disabled={isSearching || selectedDonors.length === 0} className="bg-destructive text-white text-xs px-3 py-1.5 rounded-md font-bold disabled:opacity-50 flex items-center">
-                    <Send className="w-3 h-3 mr-1" /> Gửi
+                  <button onClick={handleBulkContact} disabled={isSearching || selectedDonors.length === 0} className="bg-destructive text-white text-sm px-4 py-2 rounded-lg font-bold disabled:opacity-50 flex items-center">
+                    <Send className="w-4 h-4 mr-1.5" /> Gửi
                   </button>
                 </div>
 
