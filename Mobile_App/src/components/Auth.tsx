@@ -64,6 +64,25 @@ export function Auth({ onLogin }: AuthProps) {
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
+  // Forgot password state
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotSent, setForgotSent] = useState(false);
+  const [isForgotLoading, setIsForgotLoading] = useState(false);
+
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsForgotLoading(true);
+    try {
+      await api.post('/forgot-password', { email: forgotEmail });
+    } catch (_) {
+      // Luôn báo thành công để tránh lộ email
+    } finally {
+      setIsForgotLoading(false);
+      setForgotSent(true);
+    }
+  };
+
   // Register state
   const [registerForm, setRegisterForm] = useState({
     fullName: '',
@@ -261,6 +280,17 @@ export function Auth({ onLogin }: AuthProps) {
                   Đăng ký ngay
                 </button>
               </p>
+
+              {/* Link quên mật khẩu */}
+              <p style={{ textAlign: 'center', fontSize: '13px', color: '#aaa', marginTop: '10px', marginBottom: 0 }}>
+                <button
+                  type="button"
+                  onClick={() => { setForgotEmail(''); setForgotSent(false); setShowForgotModal(true); }}
+                  style={{ background: 'none', border: 'none', color: '#aaa', cursor: 'pointer', fontSize: '13px', padding: 0, textDecoration: 'underline' }}
+                >
+                  Quên mật khẩu?
+                </button>
+              </p>
             </form>
           </div>
         </div>
@@ -372,25 +402,74 @@ export function Auth({ onLogin }: AuthProps) {
       )}
 
       {/* ── TERMS MODAL ─────────────────────────────────────────────────── */}
+      {/* ── TERMS MODAL (centered) ─────────────────────────────────────── */}
       {showTermsModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 50 }}>
-          <div style={{ backgroundColor: '#fff', width: '100%', maxWidth: '430px', borderRadius: '24px 24px 0 0', maxHeight: '85vh', display: 'flex', flexDirection: 'column', boxShadow: '0 -4px 24px rgba(0,0,0,0.15)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #eee', flexShrink: 0 }}>
-              <h2 style={{ fontSize: '15px', fontWeight: 'bold', margin: 0 }}>Điều khoản &amp; Điều kiện sử dụng</h2>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, padding: '20px' }}>
+          <div style={{ backgroundColor: '#fff', width: '100%', maxWidth: '390px', borderRadius: '16px', maxHeight: '78vh', display: 'flex', flexDirection: 'column', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderBottom: '1px solid #eee', flexShrink: 0 }}>
+              <h2 style={{ fontSize: '14px', fontWeight: 'bold', margin: 0 }}>Điều khoản &amp; Điều kiện sử dụng</h2>
               <button onClick={() => setShowTermsModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', borderRadius: '50%' }}>
-                <X size={20} color="#888" />
+                <X size={18} color="#888" />
               </button>
             </div>
-            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '14px 18px' }}>
               <TermsContent />
             </div>
-            <div style={{ padding: '16px 20px', borderTop: '1px solid #eee', flexShrink: 0 }}>
+            <div style={{ padding: '14px 18px', borderTop: '1px solid #eee', flexShrink: 0 }}>
               <button
                 onClick={() => { setRegisterForm((prev: any) => ({ ...prev, agreeToTerms: true })); setShowTermsModal(false); }}
-                style={{ ...btnPrimary, borderRadius: '12px', padding: '14px' }}
+                style={{ ...btnPrimary, borderRadius: '10px', padding: '12px' }}
               >
                 Tôi Đồng Ý
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── FORGOT PASSWORD MODAL ─────────────────────────────────────── */}
+      {showForgotModal && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, padding: '20px' }}>
+          <div style={{ backgroundColor: '#fff', width: '100%', maxWidth: '360px', borderRadius: '16px', boxShadow: '0 8px 32px rgba(0,0,0,0.2)', overflow: 'hidden' }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderBottom: '1px solid #eee' }}>
+              <h2 style={{ fontSize: '15px', fontWeight: 'bold', margin: 0 }}>Quên mật khẩu</h2>
+              <button onClick={() => setShowForgotModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', borderRadius: '50%' }}>
+                <X size={18} color="#888" />
+              </button>
+            </div>
+            {/* Body */}
+            <div style={{ padding: '20px 18px' }}>
+              {forgotSent ? (
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{ fontSize: '15px', color: '#2d7a2d', fontWeight: '600', marginBottom: '8px' }}>✅ Đã gửi!</p>
+                  <p style={{ fontSize: '14px', color: '#555' }}>Nếu email tồn tại, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu. Vui lòng kiểm tra hộp thư.</p>
+                  <button
+                    onClick={() => setShowForgotModal(false)}
+                    style={{ ...btnPrimary, marginTop: '20px', borderRadius: '10px', padding: '12px' }}
+                  >
+                    Đóng
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleForgotSubmit}>
+                  <p style={{ fontSize: '14px', color: '#555', marginBottom: '16px', marginTop: 0 }}>
+                    Nhập email tài khoản của bạn, chúng tôi sẽ gửi link đặt lại mật khẩu.
+                  </p>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#1a1a1a' }}>Email</label>
+                  <input
+                    type="email"
+                    placeholder="example@gmail.com"
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    required
+                    style={{ width: '100%', marginTop: '6px', marginBottom: '20px', padding: '10px 12px', backgroundColor: '#F0EDE8', border: '1px solid #D9D0C7', borderRadius: '8px', fontSize: '14px', color: '#1a1a1a', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                  <button type="submit" disabled={isForgotLoading} style={{ ...btnPrimary, borderRadius: '10px', padding: '12px' }}>
+                    {isForgotLoading ? (<><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />Đang gửi...</>) : 'Gửi link đặt lại'}
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
